@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "114596867965",
+    "project_id": "citizen-report-incident",
+    "storage_bucket": "citizen-report-incident.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:114596867965:android:b2f67f033b3a6f1d70a614",
+        "android_client_info": {
+          "package_name": "com.example.citizen_report_incident"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDqNce17eeKb3JS1aw8jn91xEx_SrM-h94"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
