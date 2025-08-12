@@ -1,5 +1,8 @@
+import 'package:citizen_report_incident/core/service/firebase_service.dart';
 import 'package:get_it/get_it.dart';
 
-final locator = GetIt.I;
+final locatorService = GetIt.I;
 
-void setupLocator() {}
+void setupLocator() {
+  locatorService.registerLazySingleton(() => FirebaseService());
+}
