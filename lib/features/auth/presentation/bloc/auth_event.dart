@@ -11,3 +11,8 @@ final class AuthRegisterEvent extends AuthEvent {
   final RegisterDTO req;
   const AuthRegisterEvent({required this.req});
 }
+
+final class AuthLoginEvent extends AuthEvent {
+  final LoginDto req;
+  const AuthLoginEvent({required this.req});
+}
