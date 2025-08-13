@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/storage/app_storage_keys.dart';
+
 import '../../../../../core/service/local_storage_hive.dart';
 
 import '../../dto/login_dto.dart';
@@ -80,11 +82,15 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
 
       final name = loginUser.user!.email!.split('@')[0];
 
-      await _localStorageService.save(AppString.userId, loginUser.user!.uid);
-      await _localStorageService.save(AppString.userName, name);
+      await _localStorageService.save(AppStorageKeys.uid, loginUser.user!.uid);
+      await _localStorageService.save(AppStorageKeys.name, name);
+      await _localStorageService.save(
+        AppStorageKeys.email,
+        loginUser.user!.email!,
+      );
 
       final UserModel userData = UserModel(
-        name: '',
+        name: name,
         email: loginUser.user!.email!,
         password: req.password,
       );
