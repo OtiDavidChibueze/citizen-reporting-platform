@@ -1,6 +1,5 @@
 import '../../data/dto/login_dto.dart';
 import 'register_page.dart';
-import '../../../incidents/presentation/pages/incident_page.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../../../core/common/theme/app_colors.dart';
