@@ -1,4 +1,4 @@
-import 'package:citizen_report_incident/storage/app_storage_keys.dart';
+import '../../../../../core/storage/app_storage_keys.dart';
 
 import '../../../../../core/service/local_storage_hive.dart';
 
@@ -15,6 +15,7 @@ import 'package:internet_connection_checker/internet_connection_checker.dart';
 abstract interface class AuthFirebaseRemoteSource {
   Future<UserModel> register(RegisterDTO req);
   Future<UserModel> login(LoginDto req);
+  Future<UserModel?> getCurrentUser();
 }
 
 class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
@@ -102,6 +103,43 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
       return UserModel.fromJson(userData.toJson());
     } catch (e) {
       AppLogger.e('Login Error: $e');
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel?> getCurrentUser() async {
+    try {
+      final firebaseUser = _firebaseService.auth.currentUser;
+
+      if (firebaseUser == null) {
+        return null;
+      }
+
+      final savedUserId = _localStorageService.get(AppStorageKeys.uid);
+
+      if (savedUserId == null || savedUserId != firebaseUser.uid) {
+        await _localStorageService.clear();
+        await _firebaseService.auth.signOut();
+        return null;
+      }
+
+      final email = _localStorageService.get(AppStorageKeys.email);
+      final name = _localStorageService.get(AppStorageKeys.name);
+
+      final UserModel userData = UserModel(
+        name: name!,
+        email: email!,
+        password: '',
+      );
+
+      AppLogger.i(
+        'Current User: Uid-> ${firebaseUser.uid}, Email-> $email, Name-> $name',
+      );
+
+      return UserModel.fromJson(userData.toJson());
+    } catch (e) {
+      AppLogger.e('Get Current User Error: $e');
       throw ServerException(e.toString());
     }
   }

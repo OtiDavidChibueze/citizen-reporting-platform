@@ -8,4 +8,5 @@ import 'package:fpdart/fpdart.dart';
 abstract interface class AuthRepository {
   Future<Either<Failure, UserEntity>> register(RegisterDTO req);
   Future<Either<Failure, UserEntity>> login(LoginDto req);
+  Future<Either<Failure, UserEntity>> getCurrentUser();
 }

@@ -1,3 +1,5 @@
+import '../../features/auth/domain/usecases/get_current_user.dart';
+
 import 'local_storage_hive.dart';
 
 import '../../features/auth/domain/usecases/login_usecase.dart';
@@ -37,10 +39,14 @@ _initAuth() {
     )
     ..registerFactory(() => RegisterUseCase(authRepository: locatorService()))
     ..registerFactory(() => LoginUsecase(authRepository: locatorService()))
+    ..registerFactory(
+      () => GetCurrentUserUsecase(authRepository: locatorService()),
+    )
     ..registerLazySingleton(
       () => AuthBloc(
         registerUseCase: locatorService(),
         loginUseCase: locatorService(),
+        getCurrentUserUsecase: locatorService(),
       ),
     );
 }

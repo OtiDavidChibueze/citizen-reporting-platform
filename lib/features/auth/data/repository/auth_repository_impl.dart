@@ -42,4 +42,23 @@ class AuthRepositoryImpl implements AuthRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, UserEntity>> getCurrentUser() async {
+    try {
+      final data = await _authFirebaseRemoteSource.getCurrentUser();
+
+      if (data == null) {
+        return Left(Failure(AppString.userNotFound));
+      }
+
+      return Right(data);
+    } on FirebaseAuthException catch (e) {
+      return Left(Failure(e.message ?? AppString.failure));
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }
