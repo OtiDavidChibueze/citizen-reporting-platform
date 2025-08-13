@@ -14,4 +14,5 @@ class AppString {
   static const String alreadyHaveAccount = 'Already have an account? ';
   static const String login = 'Login';
   static const String fontFamily = 'Delius';
+  static const String registerUserFailed = 'User creation failed';
 }

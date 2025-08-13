@@ -1,4 +1,4 @@
-import 'package:firebase_auth/firebase_auth.dart';
+import 'package:citizen_report_incident/features/auth/data/model/user_model.dart';
 
 import '../../../../../core/constants/app_string.dart';
 import '../../../../../core/error/exception.dart';
@@ -8,7 +8,7 @@ import '../../dto/register_dto.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 abstract interface class AuthFirebaseRemoteSource {
-  Future<User> register(RegisterDTO req);
+  Future<UserModel> register(RegisterDTO req);
 }
 
 class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
@@ -22,7 +22,7 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
        _internetConnectionChecker = internetConnectionChecker;
 
   @override
-  Future<User> register(RegisterDTO req) async {
+  Future<UserModel> register(RegisterDTO req) async {
     try {
       if (!await _internetConnectionChecker.hasConnection) {
         throw ServerException(AppString.noInternetConnection);
@@ -38,9 +38,17 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
         throw ServerException(AppString.registerUserFailed);
       }
 
-      AppLogger.i('User registered: $createUser');
+      final UserModel userData = UserModel(
+        name: createUser.user!.displayName!,
+        email: createUser.user!.email!,
+        password: req.password,
+      );
 
-      return createUser.user!;
+      AppLogger.i(
+        'User registered: Uid-> ${createUser.user!.uid}, Email-> ${createUser.user!.email}',
+      );
+
+      return UserModel.fromJson(userData.toJson());
     } catch (e) {
       AppLogger.e('Register Error: $e');
       throw ServerException(e.toString());

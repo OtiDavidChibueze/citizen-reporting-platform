@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/auth/domain/entities/user_entity.dart';
+
 import '../../../../core/constants/app_string.dart';
 import '../../../../core/error/exception.dart';
 import '../../../../core/error/failure.dart';
@@ -15,12 +17,13 @@ class AuthRepositoryImpl implements AuthRepository {
   }) : _authFirebaseRemoteSource = authFirebaseRemoteSource;
 
   @override
-  Future<Either<Failure, dynamic>> register(RegisterDTO req) => _getCredentails(
-    () async => await _authFirebaseRemoteSource.register(req),
-  );
+  Future<Either<Failure, UserEntity>> register(RegisterDTO req) =>
+      _getCredentails(
+        () async => await _authFirebaseRemoteSource.register(req),
+      );
 
-  Future<Either<Failure, dynamic>> _getCredentails(
-    Future<dynamic> Function() fn,
+  Future<Either<Failure, UserEntity>> _getCredentails(
+    Future<UserEntity> Function() fn,
   ) async {
     try {
       final data = await fn();
