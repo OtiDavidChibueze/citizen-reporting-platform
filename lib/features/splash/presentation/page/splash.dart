@@ -21,6 +21,8 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () {
+      if (!mounted) return null;
+
       context.goNamed(LoginPage.routeName);
     });
   }
