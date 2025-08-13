@@ -34,6 +34,10 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
             password: req.password,
           );
 
+      if (createUser.user == null) {
+        throw ServerException(AppString.registerUserFailed);
+      }
+
       AppLogger.i('User registered: $createUser');
 
       return createUser.user!;
