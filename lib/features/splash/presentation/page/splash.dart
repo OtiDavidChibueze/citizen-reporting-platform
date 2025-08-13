@@ -1,7 +1,8 @@
+import '../../../auth/presentation/pages/login_page.dart';
+
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/constants/app_image_urls.dart';
 import '../../../../core/utils/screen_util.dart';
-import '../../../incidents/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 
@@ -20,7 +21,7 @@ class _SplashState extends State<Splash> {
     super.initState();
 
     Future.delayed(const Duration(seconds: 3), () {
-      context.goNamed(RegisterPage.routeName);
+      context.goNamed(LoginPage.routeName);
     });
   }
 
