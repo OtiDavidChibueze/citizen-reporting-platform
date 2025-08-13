@@ -1,10 +1,10 @@
-import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
-import 'package:citizen_report_incident/core/utils/screen_util.dart';
+import '../common/theme/app_colors.dart';
+import 'screen_util.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {
   static void error(BuildContext context, String message) {
-    _snackbar(context, message, AppColors.error);
+    _snackbar(context, message, AppColors.scaffold);
   }
 
   static void success(BuildContext context, String message) {

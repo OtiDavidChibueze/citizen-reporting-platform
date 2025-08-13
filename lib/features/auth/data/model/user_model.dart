@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-import 'package:citizen_report_incident/features/auth/domain/entities/user_entity.dart';
+import '../../domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel({

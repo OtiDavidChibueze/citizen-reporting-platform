@@ -1,4 +1,4 @@
-import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
+import '../common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -18,7 +18,7 @@ class CustomDialogLoader {
               return PopScope(
                 canPop: false,
                 child: Center(
-                  child: SpinKitCubeGrid(color: AppColors.white, size: 50.0),
+                  child: SpinKitWave(color: AppColors.white, size: 30.0),
                 ),
               );
             },
