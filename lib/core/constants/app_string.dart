@@ -20,6 +20,4 @@ class AppString {
   static const String loginFailed = 'Login Failed';
   static const String dontHaveAccount = 'Don\'t have an account? ';
   static const String boxName = 'users_IDS';
-  static const String userId = 'weudgfhjdkqwo';
-  static const String userName = 'weudgiodwmqfhjdkqwo';
 }
