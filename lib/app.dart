@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
       builder: (context, child) => MaterialApp.router(
         title: AppString.appName,
         debugShowCheckedModeBanner: false,
+        theme: ThemeData(fontFamily: AppString.fontFamily),
         routerConfig: AppRoutes.goRouter,
       ),
     );
