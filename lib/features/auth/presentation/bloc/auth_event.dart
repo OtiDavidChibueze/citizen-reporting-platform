@@ -16,3 +16,5 @@ final class AuthLoginEvent extends AuthEvent {
   final LoginDto req;
   const AuthLoginEvent({required this.req});
 }
+
+final class AuthGetCurrentUserEvent extends AuthEvent {}
