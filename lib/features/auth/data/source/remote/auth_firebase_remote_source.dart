@@ -1,3 +1,5 @@
+import 'package:firebase_auth/firebase_auth.dart';
+
 import '../../../../../core/constants/app_string.dart';
 import '../../../../../core/error/exception.dart';
 import '../../../../../core/logger/app_logger.dart';
@@ -6,7 +8,7 @@ import '../../dto/register_dto.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 abstract interface class AuthFirebaseRemoteSource {
-  Future<dynamic> register(RegisterDTO req);
+  Future<User> register(RegisterDTO req);
 }
 
 class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
@@ -20,7 +22,7 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
        _internetConnectionChecker = internetConnectionChecker;
 
   @override
-  Future register(RegisterDTO req) async {
+  Future<User> register(RegisterDTO req) async {
     try {
       if (!await _internetConnectionChecker.hasConnection) {
         throw ServerException(AppString.noInternetConnection);
@@ -34,7 +36,7 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
 
       AppLogger.i('User registered: $createUser');
 
-      return createUser.user;
+      return createUser.user!;
     } catch (e) {
       AppLogger.e('Register Error: $e');
       throw ServerException(e.toString());
