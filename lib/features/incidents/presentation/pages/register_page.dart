@@ -39,7 +39,7 @@ class _RegisterPageState extends State<RegisterPage> {
 
   _clear() {
     _emailCtrl.clear();
-    _nameCtrl.dispose();
+    _nameCtrl.clear();
     _passwordCtrl.clear();
   }
 
@@ -51,18 +51,18 @@ class _RegisterPageState extends State<RegisterPage> {
         body: BlocConsumer<AuthBloc, AuthState>(
           listener: (context, state) {
             if (state is AuthLoadingState) {
-              CustomDialogLoader.show(context);
+              return CustomDialogLoader.show(context);
             }
 
             if (state is AuthSuccessState) {
-              CustomDialogLoader.cancel(context);
               _clear();
-              CustomSnackbar.success(context, AppString.registerSuccess);
+              CustomDialogLoader.cancel(context);
+              return CustomSnackbar.success(context, AppString.registerSuccess);
             }
 
             if (state is AuthErrorState) {
               CustomDialogLoader.cancel(context);
-              CustomSnackbar.error(context, state.message);
+              return CustomSnackbar.error(context, state.message);
             }
           },
           builder: (context, state) {
