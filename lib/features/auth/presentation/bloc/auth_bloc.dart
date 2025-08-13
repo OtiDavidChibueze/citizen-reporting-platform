@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/auth/domain/entities/user_entity.dart';
+
 import '../../data/dto/register_dto.dart';
 import '../../domain/usecases/register_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -21,12 +23,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter<AuthState> emit,
   ) async {
     final result = await _registerUseCase(
-      RegisterDTO(email: event.req.email, password: event.req.password),
+      RegisterDTO(
+        name: event.req.name,
+        email: event.req.email,
+        password: event.req.password,
+      ),
     );
 
     result.fold(
       (l) => emit(AuthErrorState(message: l.message)),
-      (r) => emit(AuthSuccessState(data: r)),
+      (r) => emit(AuthSuccessState(user: r)),
     );
   }
 }
