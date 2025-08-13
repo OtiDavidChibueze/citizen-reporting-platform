@@ -1,3 +1,5 @@
+import '../../features/auth/domain/entities/user_entity.dart';
+
 import '../../features/auth/presentation/pages/login_page.dart';
 import '../../features/incidents/presentation/pages/incident_page.dart';
 
@@ -30,7 +32,11 @@ class AppRoutes {
       GoRoute(
         path: '/incident',
         name: IncidentPage.routeName,
-        builder: (context, state) => LoginPage(),
+        builder: (context, state) {
+          final user = state.extra as UserEntity;
+
+          return IncidentPage(currentUser: user);
+        },
       ),
     ],
   );
