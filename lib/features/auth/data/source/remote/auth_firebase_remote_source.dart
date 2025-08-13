@@ -39,7 +39,7 @@ class AuthFirebaseRemoteSourceImpl implements AuthFirebaseRemoteSource {
       }
 
       final UserModel userData = UserModel(
-        name: createUser.user!.displayName!,
+        name: req.name,
         email: createUser.user!.email!,
         password: req.password,
       );

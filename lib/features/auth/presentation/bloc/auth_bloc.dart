@@ -14,7 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc({required RegisterUseCase registerUseCase})
     : _registerUseCase = registerUseCase,
       super(AuthInitialState()) {
-    on<AuthEvent>((_, emit) => AuthLoadingState());
+    on<AuthEvent>((_, emit) => emit(AuthLoadingState()));
     on<AuthRegisterEvent>(_register);
   }
 
