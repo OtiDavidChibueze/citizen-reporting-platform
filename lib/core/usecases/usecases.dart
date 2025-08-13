@@ -1,4 +1,4 @@
-import 'package:citizen_report_incident/core/error/failure.dart';
+import '../error/failure.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract class UseCase<Type, Params> {

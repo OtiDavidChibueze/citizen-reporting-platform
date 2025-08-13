@@ -1,5 +1,5 @@
-import 'package:citizen_report_incident/features/incidents/presentation/pages/register_page.dart';
-import 'package:citizen_report_incident/features/splash/presentation/page/splash.dart';
+import '../../features/incidents/presentation/pages/register_page.dart';
+import '../../features/splash/presentation/page/splash.dart';
 import 'package:go_router/go_router.dart';
 
 class AppRoutes {

@@ -1,8 +1,8 @@
-import 'package:citizen_report_incident/core/constants/app_string.dart';
-import 'package:citizen_report_incident/core/error/exception.dart';
-import 'package:citizen_report_incident/core/logger/app_logger.dart';
-import 'package:citizen_report_incident/core/service/firebase_service.dart';
-import 'package:citizen_report_incident/features/auth/data/dto/register_dto.dart';
+import '../../../../../core/constants/app_string.dart';
+import '../../../../../core/error/exception.dart';
+import '../../../../../core/logger/app_logger.dart';
+import '../../../../../core/service/firebase_service.dart';
+import '../../dto/register_dto.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 
 abstract interface class AuthFirebaseRemoteSource {

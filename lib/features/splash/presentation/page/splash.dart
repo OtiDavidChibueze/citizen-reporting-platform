@@ -1,7 +1,7 @@
-import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
-import 'package:citizen_report_incident/core/constants/app_image_urls.dart';
-import 'package:citizen_report_incident/core/utils/screen_util.dart';
-import 'package:citizen_report_incident/features/incidents/presentation/pages/register_page.dart';
+import '../../../../core/common/theme/app_colors.dart';
+import '../../../../core/constants/app_image_urls.dart';
+import '../../../../core/utils/screen_util.dart';
+import '../../../incidents/presentation/pages/register_page.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
 

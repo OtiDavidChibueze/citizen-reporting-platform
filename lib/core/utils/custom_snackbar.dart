@@ -1,4 +1,4 @@
-import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
+import '../common/theme/app_colors.dart';
 import 'package:flutter/material.dart';
 
 class CustomSnackbar {

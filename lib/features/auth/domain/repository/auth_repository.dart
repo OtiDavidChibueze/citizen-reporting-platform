@@ -1,5 +1,5 @@
-import 'package:citizen_report_incident/core/error/failure.dart';
-import 'package:citizen_report_incident/features/auth/data/dto/register_dto.dart';
+import '../../../../core/error/failure.dart';
+import '../../data/dto/register_dto.dart';
 import 'package:fpdart/fpdart.dart';
 
 abstract interface class AuthRepository {

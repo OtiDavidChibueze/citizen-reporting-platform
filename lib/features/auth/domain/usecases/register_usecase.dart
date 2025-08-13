@@ -1,7 +1,7 @@
-import 'package:citizen_report_incident/core/error/failure.dart';
-import 'package:citizen_report_incident/core/usecases/usecases.dart';
-import 'package:citizen_report_incident/features/auth/data/dto/register_dto.dart';
-import 'package:citizen_report_incident/features/auth/domain/repository/auth_repository.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/usecases/usecases.dart';
+import '../../data/dto/register_dto.dart';
+import '../repository/auth_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class RegisterUseCase implements UseCase<dynamic, RegisterDTO> {

@@ -1,5 +1,5 @@
-import 'package:citizen_report_incident/features/auth/data/dto/register_dto.dart';
-import 'package:citizen_report_incident/features/auth/domain/usecases/register_usecase.dart';
+import '../../data/dto/register_dto.dart';
+import '../../domain/usecases/register_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 

@@ -1,5 +1,5 @@
-import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
-import 'package:citizen_report_incident/core/utils/screen_util.dart';
+import '../theme/app_colors.dart';
+import '../../utils/screen_util.dart';
 import 'package:flutter/material.dart';
 
 class CustomButtonWidget extends StatelessWidget {

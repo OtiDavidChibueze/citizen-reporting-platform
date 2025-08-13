@@ -1,9 +1,9 @@
-import 'package:citizen_report_incident/core/constants/app_string.dart';
-import 'package:citizen_report_incident/core/error/exception.dart';
-import 'package:citizen_report_incident/core/error/failure.dart';
-import 'package:citizen_report_incident/features/auth/data/dto/register_dto.dart';
-import 'package:citizen_report_incident/features/auth/data/source/remote/auth_firebase_remote_source.dart';
-import 'package:citizen_report_incident/features/auth/domain/repository/auth_repository.dart';
+import '../../../../core/constants/app_string.dart';
+import '../../../../core/error/exception.dart';
+import '../../../../core/error/failure.dart';
+import '../dto/register_dto.dart';
+import '../source/remote/auth_firebase_remote_source.dart';
+import '../../domain/repository/auth_repository.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:fpdart/fpdart.dart';
 
