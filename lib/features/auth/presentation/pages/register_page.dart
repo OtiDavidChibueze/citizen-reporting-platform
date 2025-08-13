@@ -1,3 +1,6 @@
+import 'login_page.dart';
+import 'package:go_router/go_router.dart';
+
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/common/widgets/custom_button_widget.dart';
 import '../../../../core/common/widgets/custom_textfield_widget.dart';
@@ -7,8 +10,8 @@ import '../../../../core/utils/custom_dialog_loader.dart';
 import '../../../../core/utils/custom_snackbar.dart';
 import '../../../../core/utils/screen_util.dart';
 import '../../../../core/utils/validations/validation.dart';
-import '../../../auth/data/dto/register_dto.dart';
-import '../../../auth/presentation/bloc/auth_bloc.dart';
+import '../../data/dto/register_dto.dart';
+import '../bloc/auth_bloc.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -57,6 +60,7 @@ class _RegisterPageState extends State<RegisterPage> {
             if (state is AuthSuccessState) {
               _clear();
               CustomDialogLoader.cancel(context);
+              context.goNamed(LoginPage.routeName);
               return CustomSnackbar.success(context, AppString.registerSuccess);
             }
 
@@ -132,34 +136,6 @@ class _RegisterPageState extends State<RegisterPage> {
                             color: isPasswordVisible
                                 ? AppColors.borderColor
                                 : AppColors.white,
-                          ),
-                        ),
-                      ),
-
-                      VSpace(20),
-
-                      Center(
-                        child: GestureDetector(
-                          onTap: () {},
-
-                          child: RichText(
-                            text: TextSpan(
-                              text: AppString.alreadyHaveAccount,
-                              style: TextStyle(
-                                color: AppColors.white,
-                                fontSize: sp(13),
-                              ),
-                              children: [
-                                TextSpan(
-                                  text: AppString.login,
-                                  style: TextStyle(
-                                    color: AppColors.error,
-                                    fontSize: sp(15),
-                                    fontWeight: FontWeight.bold,
-                                  ),
-                                ),
-                              ],
-                            ),
                           ),
                         ),
                       ),
