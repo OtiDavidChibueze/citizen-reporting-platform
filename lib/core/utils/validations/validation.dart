@@ -1,6 +1,11 @@
 import '../../constants/app_string.dart';
 
 class Validation {
+  static String? isEmpty(String? value) {
+    if (value == null || value.isEmpty) return AppString.required;
+    return null;
+  }
+
   static String? email(String? value) {
     if (value == null || value.isEmpty) return AppString.required;
 
