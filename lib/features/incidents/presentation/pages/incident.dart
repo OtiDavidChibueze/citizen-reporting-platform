@@ -1,0 +1,70 @@
+import '../../../../core/common/cubit/navigation_cubit/navigation_cubit.dart';
+import '../../../../core/utils/screen_util.dart';
+import '../../../auth/domain/entities/user_entity.dart';
+import 'add_incident_page.dart';
+import 'feed_page.dart';
+import 'home_page.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+
+class Incident extends StatelessWidget {
+  final UserEntity? currentUser;
+
+  static const String routeName = 'main';
+
+  const Incident({super.key, this.currentUser});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      backgroundColor: Colors.grey.shade100,
+
+      body: BlocBuilder<NavigationCubit, NavigationState>(
+        builder: (context, state) {
+          switch (state.selectedIndex) {
+            case 0:
+              return HomePage(currentUser: currentUser);
+            case 1:
+              return AddIncidentPage();
+            case 2:
+              return FeedPage();
+            default:
+              return SizedBox();
+          }
+        },
+      ),
+
+      bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
+        builder: (context, state) {
+          return NavigationBar(
+            backgroundColor: Colors.grey.shade100,
+            selectedIndex: state.selectedIndex,
+            onDestinationSelected: (val) =>
+                context.read<NavigationCubit>().setSelectedIndex(val),
+            indicatorColor: Colors.transparent,
+            labelTextStyle: WidgetStatePropertyAll(TextStyle(fontSize: sp(12))),
+            destinations: [
+              NavigationDestination(
+                icon: Icon(Icons.home_outlined),
+                label: 'Home',
+                selectedIcon: Icon(Icons.home),
+              ),
+
+              NavigationDestination(
+                icon: Icon(Icons.add_outlined),
+                label: 'Add',
+                selectedIcon: Icon(Icons.add),
+              ),
+
+              NavigationDestination(
+                icon: Icon(Icons.newspaper_outlined),
+                label: 'Feed',
+                selectedIcon: Icon(Icons.newspaper),
+              ),
+            ],
+          );
+        },
+      ),
+    );
+  }
+}

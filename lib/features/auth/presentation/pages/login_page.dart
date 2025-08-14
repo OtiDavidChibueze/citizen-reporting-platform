@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
             if (state is AuthSuccessState) {
               _clear();
               CustomDialogLoader.cancel(context);
-              return CustomSnackbar.success(context, AppString.loginSuccess);
+              return CustomSnackbar.info(context, AppString.loginSuccess);
             }
 
             if (state is AuthErrorState) {

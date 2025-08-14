@@ -1,31 +1,12 @@
-import '../../../auth/presentation/pages/login_page.dart';
-
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/constants/app_image_urls.dart';
 import '../../../../core/utils/screen_util.dart';
 import 'package:flutter/material.dart';
-import 'package:go_router/go_router.dart';
 
-class Splash extends StatefulWidget {
+class Splash extends StatelessWidget {
   static const routeName = 'splash';
 
   const Splash({super.key});
-
-  @override
-  State<Splash> createState() => _SplashState();
-}
-
-class _SplashState extends State<Splash> {
-  @override
-  initState() {
-    super.initState();
-
-    Future.delayed(const Duration(seconds: 3), () {
-      if (!mounted) return null;
-
-      context.goNamed(LoginPage.routeName);
-    });
-  }
 
   @override
   Widget build(BuildContext context) {

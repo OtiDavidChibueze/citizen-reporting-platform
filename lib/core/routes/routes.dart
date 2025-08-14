@@ -1,7 +1,10 @@
+import '../../features/incidents/presentation/pages/add_incident_page.dart';
+import '../../features/incidents/presentation/pages/home_page.dart';
+
 import '../../features/auth/domain/entities/user_entity.dart';
 
 import '../../features/auth/presentation/pages/login_page.dart';
-import '../../features/incidents/presentation/pages/incident_page.dart';
+import '../../features/incidents/presentation/pages/incident.dart';
 
 import '../../features/auth/presentation/pages/register_page.dart';
 import '../../features/splash/presentation/page/splash.dart';
@@ -31,12 +34,24 @@ class AppRoutes {
 
       GoRoute(
         path: '/incident',
-        name: IncidentPage.routeName,
+        name: Incident.routeName,
         builder: (context, state) {
           final user = state.extra as UserEntity;
 
-          return IncidentPage(currentUser: user);
+          return Incident(currentUser: user);
         },
+      ),
+
+      GoRoute(
+        path: '/add-incident',
+        name: AddIncidentPage.routeName,
+        builder: (context, state) => AddIncidentPage(),
+      ),
+
+      GoRoute(
+        path: '/home',
+        name: HomePage.routeName,
+        builder: (context, state) => HomePage(),
       ),
     ],
   );

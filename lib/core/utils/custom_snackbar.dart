@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class CustomSnackbar {
   static void error(BuildContext context, String message) {
-    _snackbar(context, message, AppColors.scaffold);
+    _snackbar(context, message, AppColors.error);
   }
 
   static void success(BuildContext context, String message) {
@@ -12,7 +12,7 @@ class CustomSnackbar {
   }
 
   static void info(BuildContext context, String message) {
-    _snackbar(context, message, AppColors.infoSnackbar);
+    _snackbar(context, message, AppColors.scaffold);
   }
 
   static void _snackbar(BuildContext context, String message, Color color) {

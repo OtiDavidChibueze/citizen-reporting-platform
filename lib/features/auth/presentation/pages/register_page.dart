@@ -33,7 +33,7 @@ class _RegisterPageState extends State<RegisterPage> {
   bool isPasswordVisible = false;
 
   @override
-  dispose() {
+  void dispose() {
     _emailCtrl.dispose();
     _nameCtrl.dispose();
     _passwordCtrl.dispose();
@@ -92,7 +92,7 @@ class _RegisterPageState extends State<RegisterPage> {
                           child: Image.asset(
                             AppImageUrls.logo,
                             fit: BoxFit.cover,
-                            height: h(200),
+                            height: h(150),
                           ),
                         ),
                       ),

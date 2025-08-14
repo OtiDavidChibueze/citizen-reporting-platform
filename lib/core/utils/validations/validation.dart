@@ -2,12 +2,16 @@ import '../../constants/app_string.dart';
 
 class Validation {
   static String? isEmpty(String? value) {
-    if (value == null || value.isEmpty) return AppString.required;
+    if (value == null || value.trim().isEmpty || value == '') {
+      return AppString.required;
+    }
     return null;
   }
 
   static String? email(String? value) {
-    if (value == null || value.isEmpty) return AppString.required;
+    if (value == null || value.trim().isEmpty || value == '') {
+      return AppString.required;
+    }
 
     final pattern = RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$');
     if (!pattern.hasMatch(value)) return AppString.emailValidation;
@@ -15,7 +19,9 @@ class Validation {
   }
 
   static String? password(val) {
-    if (val == null || val.isEmpty) return AppString.required;
+    if (val == null || val.trim().isEmpty || val == '') {
+      return AppString.required;
+    }
 
     final int minInput = 6;
     final int maxInput = 20;

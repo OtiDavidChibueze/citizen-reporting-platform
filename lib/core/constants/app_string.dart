@@ -21,4 +21,5 @@ class AppString {
   static const String dontHaveAccount = 'Don\'t have an account? ';
   static const String boxName = 'users_IDS';
   static const String userNotFound = 'No active session found';
+  static const String noImage = 'No image selected';
 }

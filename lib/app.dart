@@ -1,6 +1,6 @@
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 import 'features/auth/presentation/pages/login_page.dart';
-import 'features/incidents/presentation/pages/incident_page.dart';
+import 'features/incidents/presentation/pages/incident.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import 'core/constants/app_string.dart';
@@ -31,7 +31,7 @@ class _MyAppState extends State<MyApp> {
       listener: (context, state) {
         if (state is AuthSuccessState) {
           return AppRoutes.goRouter.goNamed(
-            IncidentPage.routeName,
+            Incident.routeName,
             extra: state.user,
           );
         } else if (state is AuthErrorState) {
