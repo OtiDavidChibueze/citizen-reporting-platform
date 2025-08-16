@@ -11,6 +11,7 @@ class IncidentModel extends IncidentEntity {
     required super.longitude,
     required super.createdAt,
     required super.createdByUserId,
+    super.createdByUsername,
   });
 
   IncidentModel copyWith({
@@ -23,6 +24,7 @@ class IncidentModel extends IncidentEntity {
     double? longitude,
     DateTime? createdAt,
     String? createdByUserId,
+    String? createdByUsername,
   }) {
     return IncidentModel(
       id: id ?? this.id,
@@ -34,6 +36,7 @@ class IncidentModel extends IncidentEntity {
       longitude: longitude ?? this.longitude,
       createdAt: createdAt ?? this.createdAt,
       createdByUserId: createdByUserId ?? this.createdByUserId,
+      createdByUsername: createdByUsername ?? this.createdByUsername,
     );
   }
 

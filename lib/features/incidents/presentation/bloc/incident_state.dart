@@ -13,6 +13,12 @@ final class IncidentLoadingState extends IncidentState {}
 
 final class IncidentSuccessState extends IncidentState {}
 
+final class GetIncidentsSuccessState extends IncidentState {
+  final List<IncidentEntity> incidents;
+
+  const GetIncidentsSuccessState({required this.incidents});
+}
+
 final class IncidentErrorState extends IncidentState {
   final String message;
 

@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/incidents/domain/usecases/get_incidents.dart';
+
 import '../common/cubit/geolocator/geolocator_cubit.dart';
 import 'supabase_service.dart';
 import '../common/cubit/image_picker/cubit/image_picker_cubit.dart';
@@ -91,7 +93,13 @@ _initIncident() {
     ..registerFactory(
       () => AddIncidentUseCase(incidentRepository: locatorService()),
     )
+    ..registerFactory(
+      () => GetIncidentsUsecase(incidentRepository: locatorService()),
+    )
     ..registerLazySingleton(
-      () => IncidentBloc(uploadInicidentUseCase: locatorService()),
+      () => IncidentBloc(
+        uploadInicidentUseCase: locatorService(),
+        getIncidentsUsecase: locatorService(),
+      ),
     );
 }

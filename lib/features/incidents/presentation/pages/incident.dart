@@ -52,13 +52,13 @@ class Incident extends StatelessWidget {
 
               NavigationDestination(
                 icon: Icon(Icons.add_outlined),
-                label: 'Add',
+                label: 'Upload',
                 selectedIcon: Icon(Icons.add),
               ),
 
               NavigationDestination(
-                icon: Icon(Icons.newspaper_outlined),
-                label: 'Feed',
+                icon: Icon(Icons.list_outlined),
+                label: 'Uploads',
                 selectedIcon: Icon(Icons.newspaper),
               ),
             ],

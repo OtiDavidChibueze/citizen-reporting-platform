@@ -58,4 +58,17 @@ class IncidentRepositoryImpl implements IncidentRepository {
       return Left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, List<IncidentEntity>>> getIncidents() async {
+    try {
+      final incidents = await _incidentRemoteSource.getIncidents();
+
+      return Right(incidents);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
 }

@@ -1,6 +1,6 @@
 import 'dart:io';
-import 'package:citizen_report_incident/core/constants/app_string.dart';
-import 'package:citizen_report_incident/features/incidents/presentation/pages/incident.dart';
+import '../../../../core/constants/app_string.dart';
+import 'incident.dart';
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
 import '../../../../core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../../../../core/common/theme/app_colors.dart';

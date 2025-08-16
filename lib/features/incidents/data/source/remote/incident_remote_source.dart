@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 abstract interface class IncidentRemoteSource {
   Future<IncidentModel> uploadInicident(IncidentModel incident);
   Future<String> uploadIncidentImage(UploadIncidentImgDto req);
+  Future<List<IncidentModel>> getIncidents();
 }
 
 class IncidentRemoteSourceImpl implements IncidentRemoteSource {
@@ -60,6 +61,33 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
       return _supabaseService.client.storage
           .from('incidents_image')
           .getPublicUrl(req.incident.id);
+    } catch (e) {
+      AppLogger.e('Incident upload Error: $e');
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<IncidentModel>> getIncidents() async {
+    try {
+      if (!await _internetConnectionChecker.hasConnection) {
+        throw ServerException(AppString.noInternetConnection);
+      }
+
+      final incidents = await _supabaseService.client
+          .from('incidents')
+          .select('*, profiles(fullname)')
+          .order('created_at', ascending: false);
+
+      AppLogger.i('Incident uploaded successfully: ${incidents.first}');
+
+      return incidents
+          .map(
+            (e) => IncidentModel.fromJson(
+              e,
+            ).copyWith(createdByUsername: e['profiles']['fullname']),
+          )
+          .toList();
     } catch (e) {
       AppLogger.e('Incident upload Error: $e');
       throw ServerException(e.toString());

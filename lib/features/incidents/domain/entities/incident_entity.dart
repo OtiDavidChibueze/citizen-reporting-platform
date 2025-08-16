@@ -8,6 +8,7 @@ class IncidentEntity {
   final double longitude;
   final DateTime createdAt;
   final String createdByUserId;
+  String? createdByUsername;
   IncidentEntity({
     required this.id,
     required this.title,
@@ -18,5 +19,6 @@ class IncidentEntity {
     required this.longitude,
     required this.createdAt,
     required this.createdByUserId,
+    this.createdByUsername,
   });
 }

@@ -12,3 +12,5 @@ final class AddIncidentEvent extends IncidentEvent {
 
   const AddIncidentEvent({required this.req});
 }
+
+final class GetIncidentsEvent extends IncidentEvent {}

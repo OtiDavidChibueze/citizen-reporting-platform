@@ -8,4 +8,6 @@ abstract interface class IncidentRepository {
   Future<Either<Failure, IncidentEntity>> uploadInicident(
     UploadIncidentDto req,
   );
+
+  Future<Either<Failure, List<IncidentEntity>>> getIncidents();
 }
