@@ -35,12 +35,11 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
       final response = await _supabaseService.client
           .from('incidents')
           .insert(incident.toJson())
-          .select()
-          .single();
+          .select();
 
-      AppLogger.i('Incident uploaded successfully: $response');
+      AppLogger.i('Incident uploaded successfully: ${response.first}');
 
-      return IncidentModel.fromJson(response);
+      return IncidentModel.fromJson(response.first);
     } catch (e) {
       AppLogger.e('Incident upload Error: $e');
       throw ServerException(e.toString());
@@ -55,11 +54,11 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
       }
 
       await _supabaseService.client.storage
-          .from('incident_img')
+          .from('incidents_image')
           .upload(req.incident.id, req.image);
 
       return _supabaseService.client.storage
-          .from('incident_img')
+          .from('incidents_image')
           .getPublicUrl(req.incident.id);
     } catch (e) {
       AppLogger.e('Incident upload Error: $e');

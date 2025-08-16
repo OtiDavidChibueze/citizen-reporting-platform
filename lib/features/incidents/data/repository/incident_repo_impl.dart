@@ -42,7 +42,7 @@ class IncidentRepositoryImpl implements IncidentRepository {
       );
 
       final imageUrl = await _incidentRemoteSource.uploadIncidentImage(
-        UploadIncidentImgDto(incident: incidentModel, image: req.imageUrl),
+        UploadIncidentImgDto(incident: incidentModel, image: req.imageFile),
       );
 
       return Right(incidentModel.copyWith(imageUrl: imageUrl));

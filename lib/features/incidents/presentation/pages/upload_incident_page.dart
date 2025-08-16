@@ -1,4 +1,9 @@
 import 'dart:io';
+
+import 'package:citizen_report_incident/core/constants/app_string.dart';
+import 'package:citizen_report_incident/features/incidents/presentation/pages/home_page.dart';
+import 'package:citizen_report_incident/features/incidents/presentation/pages/incident.dart';
+
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
 import '../../../../core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../../../../core/common/theme/app_colors.dart';
@@ -31,7 +36,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
   final _titleCtrl = TextEditingController();
   final _descriptionCtrl = TextEditingController();
   String? _selectedCategory;
-  File? imageUrl;
+  File? imageFile;
   double? lat;
   double? long;
 
@@ -49,7 +54,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
     _titleCtrl.clear();
     _descriptionCtrl.clear();
     _selectedCategory = null;
-    imageUrl = null;
+    imageFile = null;
     lat = null;
     long = null;
   }
@@ -65,7 +70,8 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
         if (state is IncidentSuccessState) {
           CustomDialogLoader.cancel(context);
           _clear();
-          context.pop();
+          CustomSnackbar.success(context, AppString.incidentSuccess);
+          return context.goNamed(Incident.routeName);
         }
 
         if (state is IncidentErrorState) {
@@ -74,7 +80,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
         }
       },
       builder: (context, state) {
-        AppLogger.d('ImageUrl: $imageUrl');
+        AppLogger.d('ImageUrl: $imageFile');
 
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: w(25), vertical: h(25)),
@@ -130,7 +136,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                       }
 
                       if (state is ImagePickerSuccessState) {
-                        imageUrl = state.imageFile;
+                        imageFile = state.imageFile;
                         return GestureDetector(
                           onTap: () {
                             context.read<ImagePickerCubit>().resetImage();
@@ -230,14 +236,14 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                         if (state is GeolocatorLoading) {
                           return Center(
                             child: CircularProgressIndicator(
-                              color: AppColors.infoSnackbar,
+                              color: AppColors.scaffold,
                             ),
                           );
                         }
 
                         if (state is GeolocatorSuccess) {
                           return Text(
-                            'latitude: ${state.position.latitude}, longitude: ${state.position.longitude}',
+                            'latitude: ${lat = state.position.latitude},  longitude: ${long = state.position.longitude}',
                           );
                         }
 
@@ -250,26 +256,6 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                     ),
                   ),
 
-                  // TextButton(
-                  //   onPressed: () {
-                  //     getCurrentPosition()
-                  //         .then((value) {
-                  //           setState(() {
-                  //             lat = value.latitude;
-                  //             long = value.longitude;
-                  //             locationMessage =
-                  //                 'Latitude: ${lat.toString()}, Longtitude: ${long.toString()}';
-                  //           });
-                  //           _liveLocationUpdate();
-                  //         })
-                  //         .catchError((e) {
-                  //           setState(() {
-                  //             locationMessage = e.toString();
-                  //           });
-                  //         });
-                  //   },
-                  //   child: Text(locationMessage),
-                  // ),
                   VSpace(10),
 
                   TextButton(
@@ -278,7 +264,9 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                         String googleUrl =
                             'https://www.google.com/maps?q=$lat,$long';
 
-                        await launchUrlString(googleUrl);
+                        if (await canLaunchUrlString(googleUrl)) {
+                          await launchUrlString(googleUrl);
+                        }
                       } else {
                         setState(() {
                           googleMapMessage =
@@ -324,11 +312,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                           );
                           return;
                         }
-                        // imageFile is optional, but you can enforce it if needed:
-                        // if (imageUrl == null) {
-                        //   showCustomSnackBar(context, 'Please select an image.');
-                        //   return;
-                        // }
+
                         context.read<IncidentBloc>().add(
                           AddIncidentEvent(
                             req: UploadIncidentDto(
@@ -337,7 +321,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                               category: _selectedCategory!,
                               latitude: lat!,
                               longitude: long!,
-                              imageUrl: imageUrl ?? File(''),
+                              imageFile: imageFile ?? File(''),
                             ),
                           ),
                         );

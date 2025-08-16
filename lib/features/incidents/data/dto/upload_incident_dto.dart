@@ -4,7 +4,7 @@ class UploadIncidentDto {
   final String title;
   final String description;
   final String category;
-  final File imageUrl;
+  final File imageFile;
   final double latitude;
   final double longitude;
 
@@ -12,7 +12,7 @@ class UploadIncidentDto {
     required this.title,
     required this.description,
     required this.category,
-    required this.imageUrl,
+    required this.imageFile,
     required this.latitude,
     required this.longitude,
   });
@@ -22,7 +22,7 @@ class UploadIncidentDto {
       'title': title,
       'description': description,
       'category': category,
-      'imageUrl': imageUrl,
+      'imageFile': imageFile,
       'latitude': latitude,
       'longitude': longitude,
     };

@@ -28,7 +28,7 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
         category: event.req.category,
         latitude: event.req.latitude,
         longitude: event.req.longitude,
-        imageUrl: event.req.imageUrl,
+        imageFile: event.req.imageFile,
       ),
     );
 
