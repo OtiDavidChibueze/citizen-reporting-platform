@@ -1,4 +1,4 @@
-import '../../features/incidents/presentation/pages/add_incident_page.dart';
+import '../../features/incidents/presentation/pages/upload_incident_page.dart';
 import '../../features/incidents/presentation/pages/home_page.dart';
 
 import '../../features/auth/domain/entities/user_entity.dart';
@@ -44,8 +44,8 @@ class AppRoutes {
 
       GoRoute(
         path: '/add-incident',
-        name: AddIncidentPage.routeName,
-        builder: (context, state) => AddIncidentPage(),
+        name: UploadIncidentPage.routeName,
+        builder: (context, state) => UploadIncidentPage(),
       ),
 
       GoRoute(

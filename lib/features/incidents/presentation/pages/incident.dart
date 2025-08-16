@@ -1,7 +1,7 @@
 import '../../../../core/common/cubit/navigation_cubit/navigation_cubit.dart';
 import '../../../../core/utils/screen_util.dart';
 import '../../../auth/domain/entities/user_entity.dart';
-import 'add_incident_page.dart';
+import 'upload_incident_page.dart';
 import 'feed_page.dart';
 import 'home_page.dart';
 import 'package:flutter/material.dart';
@@ -25,7 +25,7 @@ class Incident extends StatelessWidget {
             case 0:
               return HomePage(currentUser: currentUser);
             case 1:
-              return AddIncidentPage();
+              return UploadIncidentPage();
             case 2:
               return FeedPage();
             default:

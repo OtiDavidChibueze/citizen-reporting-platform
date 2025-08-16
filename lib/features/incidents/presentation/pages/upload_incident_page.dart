@@ -19,16 +19,16 @@ import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 import '../../../../core/service/geo_location.dart';
 
-class AddIncidentPage extends StatefulWidget {
+class UploadIncidentPage extends StatefulWidget {
   static const String routeName = 'add-incident';
 
-  const AddIncidentPage({super.key});
+  const UploadIncidentPage({super.key});
 
   @override
-  State<AddIncidentPage> createState() => _AddIncidentPageState();
+  State<UploadIncidentPage> createState() => _UploadIncidentPageState();
 }
 
-class _AddIncidentPageState extends State<AddIncidentPage> {
+class _UploadIncidentPageState extends State<UploadIncidentPage> {
   final _incidentFormKey = GlobalKey<FormState>();
   final _titleCtrl = TextEditingController();
   final _descriptionCtrl = TextEditingController();

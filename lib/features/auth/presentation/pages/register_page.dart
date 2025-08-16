@@ -101,7 +101,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       CustomTextfieldWidget(
                         controller: _fullnameCtrl,
                         keyboardType: TextInputType.name,
-                        hintText: AppString.name,
+                        hintText: AppString.fullname,
                         validator: (val) => Validation.isEmpty(val),
                       ),
 

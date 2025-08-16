@@ -15,7 +15,7 @@ class AppString {
   static const String login = 'Login';
   static const String fontFamily = 'Delius';
   static const String registerUserFailed = 'User creation failed';
-  static const String name = 'Name';
+  static const String fullname = 'Full Name';
   static const String loginSuccess = 'Welcome back :)';
   static const String loginFailed = 'Login Failed';
   static const String dontHaveAccount = 'Don\'t have an account? ';
