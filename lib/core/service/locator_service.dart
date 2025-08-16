@@ -1,4 +1,5 @@
-import 'package:citizen_report_incident/core/service/supabase_service.dart';
+import '../common/cubit/geolocator/geolocator_cubit.dart';
+import 'supabase_service.dart';
 import '../common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../common/cubit/navigation_cubit/navigation_cubit.dart';
 import '../../features/incidents/data/repository/incident_repo_impl.dart';
@@ -25,19 +26,23 @@ final locatorService = GetIt.I;
 
 setupLocator() {
   locatorService.registerLazySingleton(() => SupabaseService());
-  locatorService.registerLazySingleton(() => Uuid());
+  locatorService.registerFactory(() => Uuid());
   locatorService.registerLazySingleton(() => InternetConnectionChecker.I);
   locatorService.registerLazySingleton(() => LocalStorageService());
 
-  locatorService.registerLazySingleton(() => ImagePicker());
+  locatorService.registerFactory(() => ImagePicker());
 
   _initAuth();
 
   _initIncident();
 
-  _initNavigationCubit();
+  locatorService.registerLazySingleton(() => NavigationCubit());
 
-  _initImagePickerCubit();
+  locatorService.registerLazySingleton(
+    () => ImagePickerCubit(imagePicker: locatorService()),
+  );
+
+  locatorService.registerFactory(() => GeolocatorCubit());
 }
 
 _initAuth() {
@@ -89,14 +94,4 @@ _initIncident() {
     ..registerLazySingleton(
       () => IncidentBloc(uploadInicidentUseCase: locatorService()),
     );
-}
-
-_initNavigationCubit() {
-  locatorService.registerLazySingleton(() => NavigationCubit());
-}
-
-_initImagePickerCubit() {
-  locatorService.registerLazySingleton(
-    () => ImagePickerCubit(imagePicker: locatorService()),
-  );
 }

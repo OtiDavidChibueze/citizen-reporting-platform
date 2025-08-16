@@ -1,14 +1,13 @@
-import '../../../../core/usecases/usecases.dart';
-import '../../domain/usecases/get_current_user.dart';
-
-import '../../data/dto/login_dto.dart';
-import '../../domain/entities/user_entity.dart';
-import '../../domain/usecases/login_usecase.dart';
-
-import '../../data/dto/register_dto.dart';
-import '../../domain/usecases/register_usecase.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+
+import '../../../../core/usecases/usecases.dart';
+import '../../data/dto/login_dto.dart';
+import '../../data/dto/register_dto.dart';
+import '../../domain/entities/user_entity.dart';
+import '../../domain/usecases/get_current_user.dart';
+import '../../domain/usecases/login_usecase.dart';
+import '../../domain/usecases/register_usecase.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';

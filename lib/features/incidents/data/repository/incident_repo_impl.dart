@@ -1,13 +1,13 @@
-import 'package:citizen_report_incident/core/error/exception.dart';
-import 'package:citizen_report_incident/core/error/failure.dart';
-import 'package:citizen_report_incident/core/service/local_storage_service.dart';
-import 'package:citizen_report_incident/core/storage/app_storage_keys.dart';
-import 'package:citizen_report_incident/features/incidents/data/dto/upload_incident_dto.dart';
-import 'package:citizen_report_incident/features/incidents/data/dto/upload_incident_img_dto.dart';
-import 'package:citizen_report_incident/features/incidents/data/model/incident_model.dart';
-import 'package:citizen_report_incident/features/incidents/data/source/remote/incident_remote_source.dart';
-import 'package:citizen_report_incident/features/incidents/domain/entities/incident_entity.dart';
-import 'package:citizen_report_incident/features/incidents/domain/repository/incident_repository.dart';
+import '../../../../core/error/exception.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/service/local_storage_service.dart';
+import '../../../../core/storage/app_storage_keys.dart';
+import '../dto/upload_incident_dto.dart';
+import '../dto/upload_incident_img_dto.dart';
+import '../model/incident_model.dart';
+import '../source/remote/incident_remote_source.dart';
+import '../../domain/entities/incident_entity.dart';
+import '../../domain/repository/incident_repository.dart';
 import 'package:fpdart/fpdart.dart';
 import 'package:uuid/uuid.dart';
 

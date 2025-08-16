@@ -1,4 +1,5 @@
-import 'package:citizen_report_incident/core/service/supabase_service.dart';
+import 'core/common/cubit/geolocator/geolocator_cubit.dart';
+import 'core/service/supabase_service.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import 'core/common/cubit/navigation_cubit/navigation_cubit.dart';
@@ -39,6 +40,7 @@ void main() async {
         BlocProvider(create: (_) => locatorService<IncidentBloc>()),
         BlocProvider(create: (_) => locatorService<NavigationCubit>()),
         BlocProvider(create: (_) => locatorService<ImagePickerCubit>()),
+        BlocProvider(create: (_) => locatorService<GeolocatorCubit>()),
       ],
       child: MyApp(),
     ),

@@ -1,4 +1,4 @@
-import 'package:citizen_report_incident/core/service/supabase_service.dart';
+import '../../../../../core/service/supabase_service.dart';
 import '../../../../../core/storage/app_storage_keys.dart';
 import '../../../../../core/service/local_storage_service.dart';
 import '../../dto/login_dto.dart';
@@ -103,7 +103,7 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
       }
 
       final userData = await _supabaseService.client
-          .from('users')
+          .from('profiles')
           .select()
           .eq('id', currentSession.user.id)
           .single();

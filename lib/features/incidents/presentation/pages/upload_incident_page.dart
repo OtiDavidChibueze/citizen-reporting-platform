@@ -1,5 +1,5 @@
 import 'dart:io';
-
+import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
 import '../../../../core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/common/widgets/custom_button_widget.dart';
@@ -14,10 +14,8 @@ import '../bloc/incident_bloc.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:geolocator/geolocator.dart';
 import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
-import '../../../../core/service/geo_location.dart';
 
 class UploadIncidentPage extends StatefulWidget {
   static const String routeName = 'add-incident';
@@ -54,25 +52,6 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
     imageUrl = null;
     lat = null;
     long = null;
-  }
-
-  _liveLocationUpdate() {
-    LocationSettings locationSettings = LocationSettings(
-      accuracy: LocationAccuracy.high,
-      distanceFilter: 100,
-    );
-
-    Geolocator.getPositionStream(locationSettings: locationSettings).listen((
-      Position position,
-    ) {
-      setState(() {
-        lat = position.latitude;
-        long = position.longitude;
-
-        locationMessage =
-            'Latitude: ${lat.toString()}, Longtitide: ${long.toString()}';
-      });
-    });
   }
 
   @override
@@ -244,25 +223,53 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
 
                   TextButton(
                     onPressed: () {
-                      getCurrentPosition()
-                          .then((value) {
-                            setState(() {
-                              lat = value.latitude;
-                              long = value.longitude;
-                              locationMessage =
-                                  'Latitude: ${lat.toString()}, Longtitude: ${long.toString()}';
-                            });
-                            _liveLocationUpdate();
-                          })
-                          .catchError((e) {
-                            setState(() {
-                              locationMessage = e.toString();
-                            });
-                          });
+                      context.read<GeolocatorCubit>().getCurrentPosition();
                     },
-                    child: Text(locationMessage),
+                    child: BlocBuilder<GeolocatorCubit, GeolocatorState>(
+                      builder: (context, state) {
+                        if (state is GeolocatorLoading) {
+                          return Center(
+                            child: CircularProgressIndicator(
+                              color: AppColors.infoSnackbar,
+                            ),
+                          );
+                        }
+
+                        if (state is GeolocatorSuccess) {
+                          return Text(
+                            'latitude: ${state.position.latitude}, longitude: ${state.position.longitude}',
+                          );
+                        }
+
+                        if (state is GeolocatorError) {
+                          return Text(state.message);
+                        }
+
+                        return Text('Click to get location');
+                      },
+                    ),
                   ),
 
+                  // TextButton(
+                  //   onPressed: () {
+                  //     getCurrentPosition()
+                  //         .then((value) {
+                  //           setState(() {
+                  //             lat = value.latitude;
+                  //             long = value.longitude;
+                  //             locationMessage =
+                  //                 'Latitude: ${lat.toString()}, Longtitude: ${long.toString()}';
+                  //           });
+                  //           _liveLocationUpdate();
+                  //         })
+                  //         .catchError((e) {
+                  //           setState(() {
+                  //             locationMessage = e.toString();
+                  //           });
+                  //         });
+                  //   },
+                  //   child: Text(locationMessage),
+                  // ),
                   VSpace(10),
 
                   TextButton(

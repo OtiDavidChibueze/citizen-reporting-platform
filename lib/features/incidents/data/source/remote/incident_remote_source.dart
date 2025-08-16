@@ -1,5 +1,5 @@
-import 'package:citizen_report_incident/core/service/supabase_service.dart';
-import 'package:citizen_report_incident/features/incidents/data/dto/upload_incident_img_dto.dart';
+import '../../../../../core/service/supabase_service.dart';
+import '../../dto/upload_incident_img_dto.dart';
 import '../../../../../core/constants/app_string.dart';
 import '../../../../../core/error/exception.dart';
 import '../../../../../core/logger/app_logger.dart';
