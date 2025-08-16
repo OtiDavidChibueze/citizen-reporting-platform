@@ -95,7 +95,7 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
           .toList();
     } catch (e) {
       AppLogger.e('Get incidents Error: $e');
-      throw ServerException(e.toString());
+      return [];
     }
   }
 

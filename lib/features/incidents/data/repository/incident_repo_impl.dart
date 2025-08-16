@@ -67,6 +67,10 @@ class IncidentRepositoryImpl implements IncidentRepository {
     try {
       final incidents = await _incidentRemoteSource.getIncidents();
 
+      if (incidents == []) {
+        return Left(Failure(AppString.noIncidentsFound));
+      }
+
       return Right(incidents);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
