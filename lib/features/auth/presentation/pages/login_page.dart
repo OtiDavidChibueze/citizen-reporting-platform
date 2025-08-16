@@ -75,7 +75,7 @@ class _LoginPageState extends State<LoginPage> {
                   key: _loginFormKey,
                   child: Column(
                     children: [
-                      VSpace(30),
+                      VSpace(50),
 
                       Center(
                         child: Container(
@@ -89,12 +89,12 @@ class _LoginPageState extends State<LoginPage> {
                           child: Image.asset(
                             AppImageUrls.logo,
                             fit: BoxFit.cover,
-                            height: h(200),
+                            height: h(150),
                           ),
                         ),
                       ),
 
-                      VSpace(50),
+                      VSpace(70),
 
                       CustomTextfieldWidget(
                         controller: _emailCtrl,
@@ -157,7 +157,7 @@ class _LoginPageState extends State<LoginPage> {
                         ),
                       ),
 
-                      VSpace(50),
+                      VSpace(80),
 
                       Container(
                         decoration: BoxDecoration(

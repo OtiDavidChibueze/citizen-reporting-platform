@@ -85,7 +85,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
               child: Column(
                 children: [
                   Text(
-                    'Add Incident',
+                    'Upload Incident',
                     style: TextStyle(
                       fontWeight: FontWeight.bold,
                       fontSize: sp(20),
@@ -231,6 +231,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                           return Center(
                             child: CircularProgressIndicator(
                               color: AppColors.scaffold,
+                              padding: EdgeInsets.all(50),
                             ),
                           );
                         }

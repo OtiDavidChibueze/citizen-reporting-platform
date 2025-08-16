@@ -77,7 +77,7 @@ class _RegisterPageState extends State<RegisterPage> {
                   key: _registerFormKey,
                   child: Column(
                     children: [
-                      VSpace(30),
+                      VSpace(50),
 
                       Center(
                         child: Container(
@@ -96,7 +96,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
 
-                      VSpace(50),
+                      VSpace(70),
 
                       CustomTextfieldWidget(
                         controller: _fullnameCtrl,
@@ -139,7 +139,7 @@ class _RegisterPageState extends State<RegisterPage> {
                         ),
                       ),
 
-                      VSpace(50),
+                      VSpace(80),
 
                       Container(
                         decoration: BoxDecoration(
