@@ -77,15 +77,13 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
       },
       builder: (context, state) {
         return Padding(
-          padding: EdgeInsets.symmetric(horizontal: w(25), vertical: h(25)),
+          padding: EdgeInsets.symmetric(horizontal: w(16), vertical: h(16)),
           child: SingleChildScrollView(
             physics: BouncingScrollPhysics(),
             child: Form(
               key: _incidentFormKey,
               child: Column(
                 children: [
-                  VSpace(20),
-
                   Text(
                     'Add Incident',
                     style: TextStyle(
@@ -189,6 +187,8 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                     dropdownColor: Colors.grey.shade100,
                     decoration: InputDecoration(
                       labelText: 'Category',
+                      labelStyle: TextStyle(color: AppColors.borderColor),
+
                       enabledBorder: OutlineInputBorder(
                         borderSide: BorderSide(
                           color: AppColors.borderColor,
@@ -238,6 +238,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                         if (state is GeolocatorSuccess) {
                           return Text(
                             'latitude: ${lat = state.position.latitude},  longitude: ${long = state.position.longitude}',
+                            style: TextStyle(fontSize: sp(13)),
                           );
                         }
 
@@ -245,7 +246,10 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                           return Text(state.message);
                         }
 
-                        return Text('Click to get location');
+                        return Text(
+                          'Click to get location',
+                          style: TextStyle(fontSize: sp(13)),
+                        );
                       },
                     ),
                   ),
@@ -268,7 +272,10 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                         });
                       }
                     },
-                    child: Text(googleMapMessage),
+                    child: Text(
+                      googleMapMessage,
+                      style: TextStyle(fontSize: sp(13)),
+                    ),
                   ),
 
                   VSpace(30),

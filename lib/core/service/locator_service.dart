@@ -1,3 +1,4 @@
+import 'package:citizen_report_incident/features/incidents/domain/usecases/fetch_incidents_by_category.dart';
 import 'package:citizen_report_incident/features/incidents/domain/usecases/get_incidents.dart';
 
 import '../common/cubit/geolocator/geolocator_cubit.dart';
@@ -96,10 +97,15 @@ _initIncident() {
     ..registerFactory(
       () => GetIncidentsUsecase(incidentRepository: locatorService()),
     )
+    ..registerFactory(
+      () =>
+          FetchIncidentsByCategoryUseCase(incidentRepository: locatorService()),
+    )
     ..registerLazySingleton(
       () => IncidentBloc(
         uploadInicidentUseCase: locatorService(),
         getIncidentsUsecase: locatorService(),
+        fetchIncidentsByCategoryUseCase: locatorService(),
       ),
     );
 }

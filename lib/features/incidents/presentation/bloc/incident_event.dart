@@ -14,3 +14,9 @@ final class AddIncidentEvent extends IncidentEvent {
 }
 
 final class GetIncidentsEvent extends IncidentEvent {}
+
+final class FetchIncidentsByCategoryEvent extends IncidentEvent {
+  final CategoryDto req;
+
+  const FetchIncidentsByCategoryEvent({required this.req});
+}

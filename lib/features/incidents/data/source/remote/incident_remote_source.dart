@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/incidents/data/dto/fetch_incident_by_category.dart';
+
 import '../../../../../core/service/supabase_service.dart';
 import '../../dto/upload_incident_img_dto.dart';
 import '../../../../../core/constants/app_string.dart';
@@ -12,6 +14,7 @@ abstract interface class IncidentRemoteSource {
   Future<IncidentModel> uploadInicident(IncidentModel incident);
   Future<String> uploadIncidentImage(UploadIncidentImgDto req);
   Future<List<IncidentModel>> getIncidents();
+  Future<List<IncidentModel>> fetchIncidentsByCategory(CategoryDto req);
 }
 
 class IncidentRemoteSourceImpl implements IncidentRemoteSource {
@@ -79,7 +82,7 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
           .select('*, profiles(fullname)')
           .order('created_at', ascending: false);
 
-      AppLogger.i('Incident uploaded successfully: ${incidents.first}');
+      AppLogger.i('Fetch incidents successfully: ${incidents.first}');
 
       return incidents
           .map(
@@ -89,8 +92,30 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
           )
           .toList();
     } catch (e) {
-      AppLogger.e('Incident upload Error: $e');
+      AppLogger.e('Get incidents Error: $e');
       throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<IncidentModel>> fetchIncidentsByCategory(CategoryDto req) async {
+    try {
+      final incidents = await _supabaseService.client
+          .from('incidents')
+          .select('*, profiles(fullname)')
+          .eq('category', req.category)
+          .order('created_at', ascending: false);
+
+      return incidents
+          .map(
+            (e) => IncidentModel.fromJson(
+              e,
+            ).copyWith(createdByUsername: e['profiles']['fullname']),
+          )
+          .toList();
+    } catch (e) {
+      AppLogger.e('fectch incidents by category Error: $e');
+      return [];
     }
   }
 }

@@ -5,12 +5,13 @@ import 'package:citizen_report_incident/features/incidents/domain/repository/inc
 import 'package:fpdart/fpdart.dart';
 
 class GetIncidentsUsecase implements UseCase<List<IncidentEntity>, NoParams> {
-  final IncidentRepository incidentRepository;
+  final IncidentRepository _incidentRepository;
 
-  GetIncidentsUsecase({required this.incidentRepository});
+  GetIncidentsUsecase({required IncidentRepository incidentRepository})
+    : _incidentRepository = incidentRepository;
 
   @override
   Future<Either<Failure, List<IncidentEntity>>> call(NoParams params) async {
-    return await incidentRepository.getIncidents();
+    return await _incidentRepository.getIncidents();
   }
 }

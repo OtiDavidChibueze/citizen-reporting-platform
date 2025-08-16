@@ -24,4 +24,5 @@ class AppString {
   static const String noImage = 'No image selected';
   static const String registrationFailed = 'Registration Failed';
   static const String incidentSuccess = 'incident uploaded';
+  static const String noIncidentsFound = 'No incidents found';
 }

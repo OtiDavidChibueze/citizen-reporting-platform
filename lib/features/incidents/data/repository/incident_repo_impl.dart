@@ -1,3 +1,6 @@
+import 'package:citizen_report_incident/core/constants/app_string.dart';
+import 'package:citizen_report_incident/features/incidents/data/dto/fetch_incident_by_category.dart';
+
 import '../../../../core/error/exception.dart';
 import '../../../../core/error/failure.dart';
 import '../../../../core/service/local_storage_service.dart';
@@ -67,6 +70,25 @@ class IncidentRepositoryImpl implements IncidentRepository {
       return Right(incidents);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, List<IncidentEntity>>> fetchIncidentsByCategory(
+    CategoryDto req,
+  ) async {
+    try {
+      final incidents = await _incidentRemoteSource.fetchIncidentsByCategory(
+        req,
+      );
+
+      if (incidents == []) {
+        return Left(Failure(AppString.noIncidentsFound));
+      }
+
+      return Right(incidents);
     } catch (e) {
       return Left(Failure(e.toString()));
     }
