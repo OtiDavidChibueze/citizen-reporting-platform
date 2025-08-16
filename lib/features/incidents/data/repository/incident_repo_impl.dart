@@ -52,8 +52,10 @@ class IncidentRepositoryImpl implements IncidentRepository {
       );
 
       return Right(uploadedIncident);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
     } catch (e) {
-      throw ServerException(e.toString());
+      return Left(Failure(e.toString()));
     }
   }
 }
