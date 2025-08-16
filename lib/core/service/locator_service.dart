@@ -1,5 +1,6 @@
-import 'package:citizen_report_incident/features/incidents/domain/usecases/fetch_incidents_by_category.dart';
-import 'package:citizen_report_incident/features/incidents/domain/usecases/get_incidents.dart';
+import '../../features/incidents/domain/usecases/fetch_incidents_by_category.dart';
+import '../../features/incidents/domain/usecases/fetch_my_incidents.dart';
+import '../../features/incidents/domain/usecases/get_incidents.dart';
 
 import '../common/cubit/geolocator/geolocator_cubit.dart';
 import 'supabase_service.dart';
@@ -81,7 +82,6 @@ _initIncident() {
         internetConnectionChecker: locatorService(),
         localStorageService: locatorService(),
         supabaseService: locatorService(),
-        uuid: locatorService(),
       ),
     )
     ..registerLazySingleton<IncidentRepository>(
@@ -101,11 +101,15 @@ _initIncident() {
       () =>
           FetchIncidentsByCategoryUseCase(incidentRepository: locatorService()),
     )
+    ..registerFactory(
+      () => FetchMyIncidentsUseCase(incidentRepository: locatorService()),
+    )
     ..registerLazySingleton(
       () => IncidentBloc(
         uploadInicidentUseCase: locatorService(),
         getIncidentsUsecase: locatorService(),
         fetchIncidentsByCategoryUseCase: locatorService(),
+        fetchMyIncidentsUseCase: locatorService(),
       ),
     );
 }

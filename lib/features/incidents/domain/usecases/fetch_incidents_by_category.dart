@@ -1,8 +1,8 @@
-import 'package:citizen_report_incident/core/error/failure.dart';
-import 'package:citizen_report_incident/core/usecases/usecases.dart';
-import 'package:citizen_report_incident/features/incidents/data/dto/fetch_incident_by_category.dart';
-import 'package:citizen_report_incident/features/incidents/domain/entities/incident_entity.dart';
-import 'package:citizen_report_incident/features/incidents/domain/repository/incident_repository.dart';
+import '../../../../core/error/failure.dart';
+import '../../../../core/usecases/usecases.dart';
+import '../../data/dto/fetch_incident_by_category.dart';
+import '../entities/incident_entity.dart';
+import '../repository/incident_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
 class FetchIncidentsByCategoryUseCase

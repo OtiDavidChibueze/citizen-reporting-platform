@@ -20,3 +20,5 @@ final class FetchIncidentsByCategoryEvent extends IncidentEvent {
 
   const FetchIncidentsByCategoryEvent({required this.req});
 }
+
+final class FetchMyIncidentsEvent extends IncidentEvent {}

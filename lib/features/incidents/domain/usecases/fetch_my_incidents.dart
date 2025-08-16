@@ -4,14 +4,15 @@ import '../entities/incident_entity.dart';
 import '../repository/incident_repository.dart';
 import 'package:fpdart/fpdart.dart';
 
-class GetIncidentsUsecase implements UseCase<List<IncidentEntity>, NoParams> {
+class FetchMyIncidentsUseCase
+    implements UseCase<List<IncidentEntity>, NoParams> {
   final IncidentRepository _incidentRepository;
 
-  GetIncidentsUsecase({required IncidentRepository incidentRepository})
+  FetchMyIncidentsUseCase({required IncidentRepository incidentRepository})
     : _incidentRepository = incidentRepository;
 
   @override
   Future<Either<Failure, List<IncidentEntity>>> call(NoParams params) async {
-    return await _incidentRepository.getIncidents();
+    return await _incidentRepository.fetchMyIncidents();
   }
 }

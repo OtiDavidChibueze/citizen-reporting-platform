@@ -1,17 +1,18 @@
-import 'core/common/cubit/geolocator/geolocator_cubit.dart';
-import 'core/service/supabase_service.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
-import 'core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
-import 'core/common/cubit/navigation_cubit/navigation_cubit.dart';
-import 'features/incidents/presentation/bloc/incident_bloc.dart';
-import 'core/service/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
+
 import 'app.dart';
+import 'core/common/cubit/geolocator/geolocator_cubit.dart';
+import 'core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
+import 'core/common/cubit/navigation_cubit/navigation_cubit.dart';
+import 'core/service/local_storage_service.dart';
 import 'core/service/locator_service.dart';
+import 'core/service/supabase_service.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
+import 'features/incidents/presentation/bloc/incident_bloc.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

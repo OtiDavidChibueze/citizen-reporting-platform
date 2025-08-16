@@ -1,4 +1,5 @@
-import 'package:citizen_report_incident/features/incidents/data/dto/fetch_incident_by_category.dart';
+import '../../../../../core/storage/app_storage_keys.dart';
+import '../../dto/fetch_incident_by_category.dart';
 
 import '../../../../../core/service/supabase_service.dart';
 import '../../dto/upload_incident_img_dto.dart';
@@ -8,26 +9,27 @@ import '../../../../../core/logger/app_logger.dart';
 import '../../../../../core/service/local_storage_service.dart';
 import '../../model/incident_model.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:uuid/uuid.dart';
 
 abstract interface class IncidentRemoteSource {
   Future<IncidentModel> uploadInicident(IncidentModel incident);
   Future<String> uploadIncidentImage(UploadIncidentImgDto req);
   Future<List<IncidentModel>> getIncidents();
   Future<List<IncidentModel>> fetchIncidentsByCategory(CategoryDto req);
+  Future<List<IncidentModel>> fetchMyIncidents();
 }
 
 class IncidentRemoteSourceImpl implements IncidentRemoteSource {
   final SupabaseService _supabaseService;
   final InternetConnectionChecker _internetConnectionChecker;
+  final LocalStorageService _localStorageService;
 
   IncidentRemoteSourceImpl({
-    required Uuid uuid,
     required SupabaseService supabaseService,
     required InternetConnectionChecker internetConnectionChecker,
     required LocalStorageService localStorageService,
   }) : _supabaseService = supabaseService,
-       _internetConnectionChecker = internetConnectionChecker;
+       _internetConnectionChecker = internetConnectionChecker,
+       _localStorageService = localStorageService;
 
   @override
   Future<IncidentModel> uploadInicident(IncidentModel incident) async {
@@ -105,6 +107,44 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
           .select('*, profiles(fullname)')
           .eq('category', req.category)
           .order('created_at', ascending: false);
+
+      AppLogger.i('Fetch incidents successfully: ${incidents.first}');
+
+      return incidents
+          .map(
+            (e) => IncidentModel.fromJson(
+              e,
+            ).copyWith(createdByUsername: e['profiles']['fullname']),
+          )
+          .toList();
+    } catch (e) {
+      AppLogger.e('fectch incidents by category Error: $e');
+      return [];
+    }
+  }
+
+  @override
+  Future<List<IncidentModel>> fetchMyIncidents() async {
+    try {
+      final loggedInUser = _supabaseService.client.auth.currentUser;
+
+      final appUserId = _localStorageService.get(AppStorageKeys.uid);
+
+      if (loggedInUser == null ||
+          appUserId == null ||
+          appUserId != loggedInUser.id) {
+        AppLogger.w('User is not logged in. Please log in first.');
+        await _supabaseService.client.auth.signOut();
+        return [];
+      }
+
+      final incidents = await _supabaseService.client
+          .from('incidents')
+          .select('*, profiles(fullname)')
+          .eq('created_by', appUserId)
+          .order('created_at', ascending: false);
+
+      AppLogger.i('Fetch incidents successfully: ${incidents.first}');
 
       return incidents
           .map(
