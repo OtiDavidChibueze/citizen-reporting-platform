@@ -38,14 +38,20 @@ class IncidentRepositoryImpl implements IncidentRepository {
         latitude: req.latitude,
         longitude: req.longitude,
         createdAt: DateTime.now(),
-        createdByUserId: _localStorageService.get(AppStorageKeys.uid)!,
+        createdByUserId: _localStorageService.get(AppStorageKeys.uid) ?? '',
       );
 
       final imageUrl = await _incidentRemoteSource.uploadIncidentImage(
         UploadIncidentImgDto(incident: incidentModel, image: req.imageFile),
       );
 
-      return Right(incidentModel.copyWith(imageUrl: imageUrl));
+      final incidentToUpload = incidentModel.copyWith(imageUrl: imageUrl);
+
+      final uploadedIncident = await _incidentRemoteSource.uploadInicident(
+        incidentToUpload,
+      );
+
+      return Right(uploadedIncident);
     } catch (e) {
       throw ServerException(e.toString());
     }

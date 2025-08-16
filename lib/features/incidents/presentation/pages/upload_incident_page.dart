@@ -1,15 +1,11 @@
 import 'dart:io';
-
 import 'package:citizen_report_incident/core/constants/app_string.dart';
-import 'package:citizen_report_incident/features/incidents/presentation/pages/home_page.dart';
 import 'package:citizen_report_incident/features/incidents/presentation/pages/incident.dart';
-
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
 import '../../../../core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/common/widgets/custom_button_widget.dart';
 import '../../../../core/common/widgets/custom_textfield_widget.dart';
-import '../../../../core/logger/app_logger.dart';
 import '../../../../core/utils/custom_dialog_loader.dart';
 import '../../../../core/utils/custom_snackbar.dart';
 import '../../../../core/utils/screen_util.dart';
@@ -53,7 +49,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
   _clear() {
     _titleCtrl.clear();
     _descriptionCtrl.clear();
-    _selectedCategory = null;
+    _selectedCategory;
     imageFile = null;
     lat = null;
     long = null;
@@ -71,7 +67,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
           CustomDialogLoader.cancel(context);
           _clear();
           CustomSnackbar.success(context, AppString.incidentSuccess);
-          return context.goNamed(Incident.routeName);
+          context.goNamed(Incident.routeName);
         }
 
         if (state is IncidentErrorState) {
@@ -80,8 +76,6 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
         }
       },
       builder: (context, state) {
-        AppLogger.d('ImageUrl: $imageFile');
-
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: w(25), vertical: h(25)),
           child: SingleChildScrollView(

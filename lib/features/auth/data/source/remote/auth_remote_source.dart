@@ -90,11 +90,15 @@ class AuthRemoteSourceImpl implements AuthRemoteSource {
     try {
       final currentSession = _supabaseService.client.auth.currentSession;
 
+      AppLogger.i('Current Session: ${currentSession?.user.id}');
+
       if (currentSession == null) {
         return null;
       }
 
       final getSavedUserId = _localStorageService.get(AppStorageKeys.uid);
+
+      AppLogger.i('Storage id: $getSavedUserId');
 
       if (getSavedUserId == null || getSavedUserId != currentSession.user.id) {
         await _localStorageService.clear();

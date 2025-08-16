@@ -60,7 +60,7 @@ class IncidentModel extends IncidentEntity {
       imageUrl: map['image_url'] ?? '',
       latitude: map['latitude'] ?? 0.0,
       longitude: map['longitude'] ?? 0.0,
-      createdAt: DateTime.parse(map['created_at']),
+      createdAt: DateTime.parse(map['created_at'] ?? DateTime.now()),
       createdByUserId: map['created_by_user_id'] ?? '',
     );
   }
