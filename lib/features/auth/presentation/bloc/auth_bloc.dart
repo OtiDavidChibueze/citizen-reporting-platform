@@ -38,7 +38,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   ) async {
     final result = await _registerUseCase(
       RegisterDTO(
-        name: event.req.name,
+        fullname: event.req.fullname,
         email: event.req.email,
         password: event.req.password,
       ),

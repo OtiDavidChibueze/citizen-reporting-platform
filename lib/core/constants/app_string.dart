@@ -22,4 +22,5 @@ class AppString {
   static const String boxName = 'users_IDS';
   static const String userNotFound = 'No active session found';
   static const String noImage = 'No image selected';
+  static const String registrationFailed = 'Registration Failed';
 }

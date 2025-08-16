@@ -1,23 +1,19 @@
+import 'package:citizen_report_incident/core/service/supabase_service.dart';
 import '../common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../common/cubit/navigation_cubit/navigation_cubit.dart';
 import '../../features/incidents/data/repository/incident_repo_impl.dart';
-import '../../features/incidents/data/source/remote/incident_firebase_remote_source.dart';
+import '../../features/incidents/data/source/remote/incident_remote_source.dart';
 import '../../features/incidents/domain/repository/incident_repository.dart';
 import '../../features/incidents/domain/usecases/add_incident_usecase.dart';
 import '../../features/incidents/presentation/bloc/incident_bloc.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:image_picker/image_picker.dart';
-
 import '../../features/auth/domain/usecases/get_current_user.dart';
-
-import 'local_storage_hive.dart';
+import 'local_storage_service.dart';
 
 import '../../features/auth/domain/usecases/login_usecase.dart';
 
-import 'firebase_service.dart';
 import '../../features/auth/data/repository/auth_repository_impl.dart';
-import '../../features/auth/data/source/remote/auth_firebase_remote_source.dart';
+import '../../features/auth/data/source/remote/auth_remote_source.dart';
 import '../../features/auth/domain/repository/auth_repository.dart';
 import '../../features/auth/domain/usecases/register_usecase.dart';
 import '../../features/auth/presentation/bloc/auth_bloc.dart';
@@ -27,13 +23,12 @@ import 'package:uuid/uuid.dart';
 
 final locatorService = GetIt.I;
 
-void setupLocator() {
-  locatorService.registerLazySingleton(() => FirebaseService());
+setupLocator() {
+  locatorService.registerLazySingleton(() => SupabaseService());
   locatorService.registerLazySingleton(() => Uuid());
   locatorService.registerLazySingleton(() => InternetConnectionChecker.I);
   locatorService.registerLazySingleton(() => LocalStorageService());
-  locatorService.registerLazySingleton(() => FirebaseStorage.instance);
-  locatorService.registerLazySingleton(() => FirebaseFirestore.instance);
+
   locatorService.registerLazySingleton(() => ImagePicker());
 
   _initAuth();
@@ -47,15 +42,15 @@ void setupLocator() {
 
 _initAuth() {
   locatorService
-    ..registerLazySingleton<AuthFirebaseRemoteSource>(
-      () => AuthFirebaseRemoteSourceImpl(
+    ..registerLazySingleton<AuthRemoteSource>(
+      () => AuthRemoteSourceImpl(
         firebaseService: locatorService(),
         internetConnectionChecker: locatorService(),
         localStorageService: locatorService(),
       ),
     )
     ..registerLazySingleton<AuthRepository>(
-      () => AuthRepositoryImpl(authFirebaseRemoteSource: locatorService()),
+      () => AuthRepositoryImpl(AuthRemoteSource: locatorService()),
     )
     ..registerFactory(() => RegisterUseCase(authRepository: locatorService()))
     ..registerFactory(() => LoginUsecase(authRepository: locatorService()))
@@ -73,23 +68,26 @@ _initAuth() {
 
 _initIncident() {
   locatorService
-    ..registerLazySingleton<IncidentFirebaseRemoteSource>(
-      () => IncidentFirebaseRemoteSourceImpl(
-        firebaseStorage: locatorService(),
-        firestore: locatorService(),
+    ..registerLazySingleton<IncidentRemoteSource>(
+      () => IncidentRemoteSourceImpl(
         internetConnectionChecker: locatorService(),
         localStorageService: locatorService(),
+        supabaseService: locatorService(),
         uuid: locatorService(),
       ),
     )
     ..registerLazySingleton<IncidentRepository>(
-      () => IncidentRepoImpl(incidentFirebaseRemoteSource: locatorService()),
+      () => IncidentRepositoryImpl(
+        incidentRemoteSource: locatorService(),
+        uuid: locatorService(),
+        localStorageService: locatorService(),
+      ),
     )
     ..registerFactory(
       () => AddIncidentUseCase(incidentRepository: locatorService()),
     )
     ..registerLazySingleton(
-      () => IncidentBloc(addIncidentUseCase: locatorService()),
+      () => IncidentBloc(uploadInicidentUseCase: locatorService()),
     );
 }
 

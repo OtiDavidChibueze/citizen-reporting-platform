@@ -8,7 +8,7 @@ sealed class IncidentEvent extends Equatable {
 }
 
 final class AddIncidentEvent extends IncidentEvent {
-  final AddIncidentDto req;
+  final UploadIncidentDto req;
 
   const AddIncidentEvent({required this.req});
 }

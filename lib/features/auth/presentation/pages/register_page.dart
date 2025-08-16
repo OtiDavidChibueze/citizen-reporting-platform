@@ -1,6 +1,5 @@
 import 'login_page.dart';
 import 'package:go_router/go_router.dart';
-
 import '../../../../core/common/theme/app_colors.dart';
 import '../../../../core/common/widgets/custom_button_widget.dart';
 import '../../../../core/common/widgets/custom_textfield_widget.dart';
@@ -28,21 +27,21 @@ class _RegisterPageState extends State<RegisterPage> {
   final GlobalKey<FormState> _registerFormKey = GlobalKey<FormState>();
   final TextEditingController _emailCtrl = TextEditingController();
   final TextEditingController _passwordCtrl = TextEditingController();
-  final TextEditingController _nameCtrl = TextEditingController();
+  final TextEditingController _fullnameCtrl = TextEditingController();
 
   bool isPasswordVisible = false;
 
   @override
   void dispose() {
     _emailCtrl.dispose();
-    _nameCtrl.dispose();
+    _fullnameCtrl.dispose();
     _passwordCtrl.dispose();
     super.dispose();
   }
 
   _clear() {
     _emailCtrl.clear();
-    _nameCtrl.clear();
+    _fullnameCtrl.clear();
     _passwordCtrl.clear();
   }
 
@@ -100,7 +99,7 @@ class _RegisterPageState extends State<RegisterPage> {
                       VSpace(50),
 
                       CustomTextfieldWidget(
-                        controller: _nameCtrl,
+                        controller: _fullnameCtrl,
                         keyboardType: TextInputType.name,
                         hintText: AppString.name,
                         validator: (val) => Validation.isEmpty(val),
@@ -156,7 +155,7 @@ class _RegisterPageState extends State<RegisterPage> {
                               context.read<AuthBloc>().add(
                                 AuthRegisterEvent(
                                   req: RegisterDTO(
-                                    name: _nameCtrl.text.trim(),
+                                    fullname: _fullnameCtrl.text.trim(),
                                     email: _emailCtrl.text.trim(),
                                     password: _passwordCtrl.text.trim(),
                                   ),

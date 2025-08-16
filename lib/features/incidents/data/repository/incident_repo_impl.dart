@@ -1,28 +1,53 @@
-import '../../../../core/error/failure.dart';
-import '../source/remote/incident_firebase_remote_source.dart';
-import '../../domain/entities/incident_entity.dart';
+import 'package:citizen_report_incident/core/error/exception.dart';
+import 'package:citizen_report_incident/core/error/failure.dart';
+import 'package:citizen_report_incident/core/service/local_storage_service.dart';
+import 'package:citizen_report_incident/core/storage/app_storage_keys.dart';
+import 'package:citizen_report_incident/features/incidents/data/dto/upload_incident_dto.dart';
+import 'package:citizen_report_incident/features/incidents/data/dto/upload_incident_img_dto.dart';
+import 'package:citizen_report_incident/features/incidents/data/model/incident_model.dart';
+import 'package:citizen_report_incident/features/incidents/data/source/remote/incident_remote_source.dart';
+import 'package:citizen_report_incident/features/incidents/domain/entities/incident_entity.dart';
+import 'package:citizen_report_incident/features/incidents/domain/repository/incident_repository.dart';
 import 'package:fpdart/fpdart.dart';
+import 'package:uuid/uuid.dart';
 
-import '../../domain/repository/incident_repository.dart';
-import '../dto/add_incident_dto.dart';
+class IncidentRepositoryImpl implements IncidentRepository {
+  final IncidentRemoteSource _incidentRemoteSource;
+  final Uuid _uuid;
+  final LocalStorageService _localStorageService;
 
-class IncidentRepoImpl implements IncidentRepository {
-  final IncidentFirebaseRemoteSource _incidentFirebaseRemoteSource;
-
-  IncidentRepoImpl({
-    required IncidentFirebaseRemoteSource incidentFirebaseRemoteSource,
-  }) : _incidentFirebaseRemoteSource = incidentFirebaseRemoteSource;
+  IncidentRepositoryImpl({
+    required IncidentRemoteSource incidentRemoteSource,
+    required Uuid uuid,
+    required LocalStorageService localStorageService,
+  }) : _incidentRemoteSource = incidentRemoteSource,
+       _uuid = uuid,
+       _localStorageService = localStorageService;
 
   @override
-  Future<Either<Failure, IncidentEntity>> addIncident(
-    AddIncidentDto req,
+  Future<Either<Failure, IncidentEntity>> uploadInicident(
+    UploadIncidentDto req,
   ) async {
     try {
-      final data = await _incidentFirebaseRemoteSource.addIncident(req);
+      final incidentModel = IncidentModel(
+        id: _uuid.v1(),
+        title: req.title,
+        description: req.description,
+        category: req.category,
+        imageUrl: '',
+        latitude: req.latitude,
+        longitude: req.longitude,
+        createdAt: DateTime.now(),
+        createdByUserId: _localStorageService.get(AppStorageKeys.uid)!,
+      );
 
-      return Right(data);
+      final imageUrl = await _incidentRemoteSource.uploadIncidentImage(
+        UploadIncidentImgDto(incident: incidentModel, image: req.imageUrl),
+      );
+
+      return Right(incidentModel.copyWith(imageUrl: imageUrl));
     } catch (e) {
-      return Left(Failure(e.toString()));
+      throw ServerException(e.toString());
     }
   }
 }

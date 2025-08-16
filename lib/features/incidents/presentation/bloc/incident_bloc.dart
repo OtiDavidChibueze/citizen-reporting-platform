@@ -1,4 +1,4 @@
-import '../../data/dto/add_incident_dto.dart';
+import '../../data/dto/upload_incident_dto.dart';
 
 import '../../domain/usecases/add_incident_usecase.dart';
 import 'package:equatable/equatable.dart';
@@ -8,10 +8,10 @@ part 'incident_event.dart';
 part 'incident_state.dart';
 
 class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
-  final AddIncidentUseCase _addIncidentUseCase;
+  final AddIncidentUseCase _uploadInicidentUseCase;
 
-  IncidentBloc({required AddIncidentUseCase addIncidentUseCase})
-    : _addIncidentUseCase = addIncidentUseCase,
+  IncidentBloc({required AddIncidentUseCase uploadInicidentUseCase})
+    : _uploadInicidentUseCase = uploadInicidentUseCase,
       super(IncidentInitialState()) {
     on<IncidentEvent>((event, emit) => emit(IncidentLoadingState()));
     on<AddIncidentEvent>(_onAddIncident);
@@ -21,8 +21,8 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
     AddIncidentEvent event,
     Emitter<IncidentState> emit,
   ) async {
-    final result = await _addIncidentUseCase(
-      AddIncidentDto(
+    final result = await _uploadInicidentUseCase(
+      UploadIncidentDto(
         title: event.req.title,
         description: event.req.description,
         category: event.req.category,

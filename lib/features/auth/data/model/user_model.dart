@@ -1,56 +1,49 @@
-import 'dart:convert';
-
 import '../../domain/entities/user_entity.dart';
 
 class UserModel extends UserEntity {
   UserModel({
-    required super.name,
+    required super.fullname,
     required super.email,
     required super.password,
   });
 
-  UserModel copyWith({String? name, String? email, String? password}) {
+  UserModel copyWith({String? fullname, String? email, String? password}) {
     return UserModel(
-      name: name ?? this.name,
+      fullname: fullname ?? this.fullname,
       email: email ?? this.email,
       password: password ?? this.password,
     );
   }
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     return <String, dynamic>{
-      'name': name,
+      'fullname': fullname,
       'email': email,
       'password': password,
     };
   }
 
-  factory UserModel.fromMap(Map<String, dynamic> map) {
+  factory UserModel.fromJson(Map<String, dynamic> map) {
     return UserModel(
-      name: map['name'] ?? '',
+      fullname: map['fullname'] ?? '',
       email: map['email'] ?? '',
       password: map['password'] ?? '',
     );
   }
 
-  String toJson() => json.encode(toMap());
-
-  factory UserModel.fromJson(String source) =>
-      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
   String toString() =>
-      'UserModel(name: $name, email: $email, password: $password)';
+      'UserModel(fullname: $fullname, email: $email, password: $password)';
 
   @override
   bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
 
-    return other.name == name &&
+    return other.fullname == fullname &&
         other.email == email &&
         other.password == password;
   }
 
   @override
-  int get hashCode => name.hashCode ^ email.hashCode ^ password.hashCode;
+  int get hashCode => fullname.hashCode ^ email.hashCode ^ password.hashCode;
 }

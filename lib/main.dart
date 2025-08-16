@@ -1,18 +1,15 @@
+import 'package:citizen_report_incident/core/service/supabase_service.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import 'core/common/cubit/navigation_cubit/navigation_cubit.dart';
 import 'features/incidents/presentation/bloc/incident_bloc.dart';
-
-import 'core/service/local_storage_hive.dart';
+import 'core/service/local_storage_service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:hive_flutter/adapters.dart';
-
 import 'app.dart';
-import 'core/service/firebase_service.dart';
 import 'core/service/locator_service.dart';
-
-import 'core/service/notification_service.dart';
 import 'features/auth/presentation/bloc/auth_bloc.dart';
 
 void main() async {
@@ -22,16 +19,18 @@ void main() async {
     SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       statusBarIconBrightness: Brightness.light,
-      statusBarBrightness: Brightness.light,
+      statusBarBrightness: Brightness.dark,
     ),
   );
+
+  await dotenv.load(fileName: '.env');
 
   await Hive.initFlutter();
   await LocalStorageService.init();
 
-  await FirebaseService.init();
+  await SupabaseService.init();
 
-  setupLocator();
+  await setupLocator();
 
   runApp(
     MultiBlocProvider(
@@ -41,19 +40,7 @@ void main() async {
         BlocProvider(create: (_) => locatorService<NavigationCubit>()),
         BlocProvider(create: (_) => locatorService<ImagePickerCubit>()),
       ],
-      child: NotificationInit(child: const MyApp()),
+      child: MyApp(),
     ),
   );
-}
-
-class NotificationInit extends StatelessWidget {
-  final Widget child;
-  const NotificationInit({required this.child, super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    NotificationService.initializeFCM(context);
-    NotificationService.subscribeToIncidents();
-    return child;
-  }
 }

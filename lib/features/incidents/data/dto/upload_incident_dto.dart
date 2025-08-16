@@ -1,12 +1,14 @@
-class AddIncidentDto {
+import 'dart:io';
+
+class UploadIncidentDto {
   final String title;
   final String description;
   final String category;
-  final String imageUrl;
+  final File imageUrl;
   final double latitude;
   final double longitude;
 
-  AddIncidentDto({
+  UploadIncidentDto({
     required this.title,
     required this.description,
     required this.category,

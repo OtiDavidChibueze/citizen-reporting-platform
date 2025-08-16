@@ -9,7 +9,7 @@ import '../../../../core/utils/custom_dialog_loader.dart';
 import '../../../../core/utils/custom_snackbar.dart';
 import '../../../../core/utils/screen_util.dart';
 import '../../../../core/utils/validations/validation.dart';
-import '../../data/dto/add_incident_dto.dart';
+import '../../data/dto/upload_incident_dto.dart';
 import '../bloc/incident_bloc.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
@@ -33,7 +33,7 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
   final _titleCtrl = TextEditingController();
   final _descriptionCtrl = TextEditingController();
   String? _selectedCategory;
-  String? imageUrl;
+  File? imageUrl;
   double? lat;
   double? long;
 
@@ -151,10 +151,7 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                       }
 
                       if (state is ImagePickerSuccessState) {
-                        imageUrl = state.imageFile.path.isNotEmpty
-                            ? state.imageFile.path
-                            : null;
-
+                        imageUrl = state.imageFile;
                         return GestureDetector(
                           onTap: () {
                             context.read<ImagePickerCubit>().resetImage();
@@ -327,13 +324,13 @@ class _AddIncidentPageState extends State<AddIncidentPage> {
                         // }
                         context.read<IncidentBloc>().add(
                           AddIncidentEvent(
-                            req: AddIncidentDto(
+                            req: UploadIncidentDto(
                               title: _titleCtrl.text.trim(),
                               description: _descriptionCtrl.text.trim(),
                               category: _selectedCategory!,
                               latitude: lat!,
                               longitude: long!,
-                              imageUrl: imageUrl ?? '',
+                              imageUrl: imageUrl ?? File(''),
                             ),
                           ),
                         );
