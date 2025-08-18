@@ -16,54 +16,58 @@ class Incident extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Colors.grey.shade100,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: Colors.grey.shade100,
 
-      body: BlocBuilder<NavigationCubit, NavigationState>(
-        builder: (context, state) {
-          switch (state.selectedIndex) {
-            case 0:
-              return HomePage(currentUser: currentUser);
-            case 1:
-              return UploadIncidentPage();
-            case 2:
-              return FeedPage();
-            default:
-              return SizedBox();
-          }
-        },
-      ),
+        body: BlocBuilder<NavigationCubit, NavigationState>(
+          builder: (context, state) {
+            switch (state.selectedIndex) {
+              case 0:
+                return HomePage(currentUser: currentUser);
+              case 1:
+                return UploadIncidentPage();
+              case 2:
+                return FeedPage();
+              default:
+                return SizedBox();
+            }
+          },
+        ),
 
-      bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
-        builder: (context, state) {
-          return NavigationBar(
-            backgroundColor: Colors.grey.shade100,
-            selectedIndex: state.selectedIndex,
-            onDestinationSelected: (val) =>
-                context.read<NavigationCubit>().setSelectedIndex(val),
-            indicatorColor: Colors.transparent,
-            labelTextStyle: WidgetStatePropertyAll(TextStyle(fontSize: sp(12))),
-            destinations: [
-              NavigationDestination(
-                icon: Icon(Icons.home_outlined),
-                label: 'Home',
-                selectedIcon: Icon(Icons.home),
+        bottomNavigationBar: BlocBuilder<NavigationCubit, NavigationState>(
+          builder: (context, state) {
+            return NavigationBar(
+              backgroundColor: Colors.grey.shade100,
+              selectedIndex: state.selectedIndex,
+              onDestinationSelected: (val) =>
+                  context.read<NavigationCubit>().setSelectedIndex(val),
+              indicatorColor: Colors.transparent,
+              labelTextStyle: WidgetStatePropertyAll(
+                TextStyle(fontSize: sp(12)),
               ),
+              destinations: [
+                NavigationDestination(
+                  icon: Icon(Icons.home_outlined),
+                  label: 'Home',
+                  selectedIcon: Icon(Icons.home),
+                ),
 
-              NavigationDestination(
-                icon: Icon(Icons.add_outlined),
-                label: 'Upload',
-                selectedIcon: Icon(Icons.add),
-              ),
+                NavigationDestination(
+                  icon: Icon(Icons.add_outlined),
+                  label: 'Upload',
+                  selectedIcon: Icon(Icons.add),
+                ),
 
-              NavigationDestination(
-                icon: Icon(Icons.list_outlined),
-                label: 'Uploads',
-                selectedIcon: Icon(Icons.newspaper),
-              ),
-            ],
-          );
-        },
+                NavigationDestination(
+                  icon: Icon(Icons.list_outlined),
+                  label: 'Uploads',
+                  selectedIcon: Icon(Icons.newspaper),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

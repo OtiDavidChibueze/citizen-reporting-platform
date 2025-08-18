@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/incidents/presentation/pages/incident.dart';
+
 import '../../data/dto/login_dto.dart';
 import 'register_page.dart';
 import 'package:go_router/go_router.dart';
@@ -57,7 +59,7 @@ class _LoginPageState extends State<LoginPage> {
             if (state is AuthSuccessState) {
               _clear();
               CustomDialogLoader.cancel(context);
-              return CustomSnackbar.info(context, AppString.loginSuccess);
+              return context.goNamed(Incident.routeName, extra: state.user);
             }
 
             if (state is AuthErrorState) {

@@ -1,6 +1,7 @@
 import 'dart:io';
+import 'package:citizen_report_incident/core/common/cubit/navigation_cubit/navigation_cubit.dart';
+
 import '../../../../core/constants/app_string.dart';
-import 'incident.dart';
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
 import '../../../../core/common/cubit/image_picker/cubit/image_picker_cubit.dart';
 import '../../../../core/common/theme/app_colors.dart';
@@ -15,7 +16,6 @@ import '../bloc/incident_bloc.dart';
 import 'package:dotted_border/dotted_border.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:go_router/go_router.dart';
 import 'package:url_launcher/url_launcher_string.dart';
 
 class UploadIncidentPage extends StatefulWidget {
@@ -60,19 +60,19 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
     return BlocConsumer<IncidentBloc, IncidentState>(
       listener: (context, state) {
         if (state is IncidentLoadingState) {
-          CustomDialogLoader.show(context);
+          return CustomDialogLoader.show(context);
         }
 
         if (state is IncidentSuccessState) {
           CustomDialogLoader.cancel(context);
           _clear();
           CustomSnackbar.success(context, AppString.incidentSuccess);
-          context.goNamed(Incident.routeName);
+          return context.read<NavigationCubit>().setSelectedIndex(0);
         }
 
         if (state is IncidentErrorState) {
           CustomDialogLoader.cancel(context);
-          CustomSnackbar.error(context, state.message);
+          return CustomSnackbar.error(context, state.message);
         }
       },
       builder: (context, state) {
@@ -331,6 +331,8 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                       color: AppColors.scaffold,
                     ),
                   ),
+
+                  VSpace(30),
                 ],
               ),
             ),

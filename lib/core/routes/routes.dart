@@ -36,8 +36,8 @@ class AppRoutes {
         path: '/incident',
         name: Incident.routeName,
         builder: (context, state) {
-          final user = state.extra;
-          return Incident(currentUser: user is UserEntity ? user : null);
+          final user = state.extra as UserEntity;
+          return Incident(currentUser: user);
         },
       ),
 
@@ -50,7 +50,11 @@ class AppRoutes {
       GoRoute(
         path: '/home',
         name: HomePage.routeName,
-        builder: (context, state) => HomePage(),
+        builder: (context, state) {
+          final user = state.extra as UserEntity;
+
+          return HomePage(currentUser: user);
+        },
       ),
     ],
   );
