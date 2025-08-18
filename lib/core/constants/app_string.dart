@@ -25,4 +25,6 @@ class AppString {
   static const String registrationFailed = 'Registration Failed';
   static const String incidentSuccess = 'incident uploaded';
   static const String noIncidentsFound = 'No incidents found';
+  static const String noFcmTokenFound = 'FCM token is null';
+  static const String noResponse = 'No response returned from Supabase.';
 }

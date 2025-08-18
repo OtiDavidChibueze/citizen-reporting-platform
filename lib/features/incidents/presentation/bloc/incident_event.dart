@@ -22,3 +22,5 @@ final class FetchIncidentsByCategoryEvent extends IncidentEvent {
 }
 
 final class FetchMyIncidentsEvent extends IncidentEvent {}
+
+final class IncidentNotificationEvent extends IncidentEvent {}

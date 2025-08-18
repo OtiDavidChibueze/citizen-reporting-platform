@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:hive_flutter/adapters.dart';
-
 import 'app.dart';
 import 'core/common/cubit/geolocator/geolocator_cubit.dart';
 import 'core/common/cubit/image_picker/cubit/image_picker_cubit.dart';

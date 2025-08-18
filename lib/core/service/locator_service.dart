@@ -1,3 +1,6 @@
+import 'package:citizen_report_incident/features/incidents/domain/usecases/incident_notification_service_usecase.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../../features/incidents/domain/usecases/fetch_incidents_by_category.dart';
 import '../../features/incidents/domain/usecases/fetch_my_incidents.dart';
 import '../../features/incidents/domain/usecases/get_incidents.dart';
@@ -33,6 +36,7 @@ setupLocator() {
   locatorService.registerFactory(() => Uuid());
   locatorService.registerLazySingleton(() => InternetConnectionChecker.I);
   locatorService.registerLazySingleton(() => LocalStorageService());
+  locatorService.registerSingleton(() => FirebaseMessaging.instance);
 
   locatorService.registerFactory(() => ImagePicker());
 
@@ -82,6 +86,7 @@ _initIncident() {
         internetConnectionChecker: locatorService(),
         localStorageService: locatorService(),
         supabaseService: locatorService(),
+        firebaseMessaging: locatorService(),
       ),
     )
     ..registerLazySingleton<IncidentRepository>(
@@ -104,12 +109,18 @@ _initIncident() {
     ..registerFactory(
       () => FetchMyIncidentsUseCase(incidentRepository: locatorService()),
     )
+    ..registerFactory(
+      () => IncidentNotificationServiceUsecase(
+        incidentRepository: locatorService(),
+      ),
+    )
     ..registerLazySingleton(
       () => IncidentBloc(
         uploadInicidentUseCase: locatorService(),
         getIncidentsUsecase: locatorService(),
         fetchIncidentsByCategoryUseCase: locatorService(),
         fetchMyIncidentsUseCase: locatorService(),
+        incidentNotificationServiceUsecase: locatorService(),
       ),
     );
 }

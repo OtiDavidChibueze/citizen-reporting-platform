@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/incidents/domain/entities/incident_notification_entity.dart';
+
 import '../../data/dto/fetch_incident_by_category.dart';
 
 import '../../../../core/error/failure.dart';
@@ -15,4 +17,7 @@ abstract interface class IncidentRepository {
     CategoryDto req,
   );
   Future<Either<Failure, List<IncidentEntity>>> fetchMyIncidents();
+
+  Future<Either<Failure, IncidentNotificationEntity>>
+  incidentNotificationService();
 }

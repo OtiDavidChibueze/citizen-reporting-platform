@@ -1,3 +1,5 @@
+import 'package:citizen_report_incident/features/incidents/domain/usecases/incident_notification_service_usecase.dart';
+
 import '../../../../core/usecases/usecases.dart';
 import '../../data/dto/fetch_incident_by_category.dart';
 import '../../domain/entities/incident_entity.dart';
@@ -16,22 +18,27 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
   final GetIncidentsUsecase _getIncidentsUsecase;
   final FetchIncidentsByCategoryUseCase _fetchIncidentsByCategoryUseCase;
   final FetchMyIncidentsUseCase _fetchMyIncidentsUseCase;
+  final IncidentNotificationServiceUsecase _incidentNotificationServiceUsecase;
 
   IncidentBloc({
     required AddIncidentUseCase uploadInicidentUseCase,
     required GetIncidentsUsecase getIncidentsUsecase,
     required FetchIncidentsByCategoryUseCase fetchIncidentsByCategoryUseCase,
     required FetchMyIncidentsUseCase fetchMyIncidentsUseCase,
+    required IncidentNotificationServiceUsecase
+    incidentNotificationServiceUsecase,
   }) : _uploadInicidentUseCase = uploadInicidentUseCase,
        _getIncidentsUsecase = getIncidentsUsecase,
        _fetchIncidentsByCategoryUseCase = fetchIncidentsByCategoryUseCase,
        _fetchMyIncidentsUseCase = fetchMyIncidentsUseCase,
+       _incidentNotificationServiceUsecase = incidentNotificationServiceUsecase,
        super(IncidentInitialState()) {
     on<IncidentEvent>((event, emit) => emit(IncidentLoadingState()));
     on<AddIncidentEvent>(_onAddIncident);
     on<GetIncidentsEvent>(_onGetIncidents);
     on<FetchIncidentsByCategoryEvent>(_onFetchIncidentsByCategory);
     on<FetchMyIncidentsEvent>(_onFetchMyIncidents);
+    on<IncidentNotificationEvent>(_onIncidentNotification);
   }
 
   Future<void> _onAddIncident(
@@ -90,6 +97,18 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
     result.fold(
       (l) => emit(IncidentErrorState(message: l.message)),
       (r) => emit(GetIncidentsSuccessState(incidents: r)),
+    );
+  }
+
+  Future<void> _onIncidentNotification(
+    IncidentNotificationEvent event,
+    Emitter<IncidentState> emit,
+  ) async {
+    final result = await _incidentNotificationServiceUsecase(NoParams());
+
+    result.fold(
+      (l) => emit(IncidentErrorState(message: l.message)),
+      (r) => emit(IncidentSuccessState()),
     );
   }
 }

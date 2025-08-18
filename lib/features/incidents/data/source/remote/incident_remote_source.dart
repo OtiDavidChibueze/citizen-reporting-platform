@@ -1,3 +1,6 @@
+import 'package:citizen_report_incident/features/incidents/data/model/incident_notification_model.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
+
 import '../../../../../core/storage/app_storage_keys.dart';
 import '../../dto/fetch_incident_by_category.dart';
 
@@ -16,20 +19,27 @@ abstract interface class IncidentRemoteSource {
   Future<List<IncidentModel>> getIncidents();
   Future<List<IncidentModel>> fetchIncidentsByCategory(CategoryDto req);
   Future<List<IncidentModel>> fetchMyIncidents();
+  Future<IncidentNotificationModel> incidentNotificationService(
+    IncidentNotificationModel incident,
+  );
+  Future<String> getFCMToken();
 }
 
 class IncidentRemoteSourceImpl implements IncidentRemoteSource {
   final SupabaseService _supabaseService;
   final InternetConnectionChecker _internetConnectionChecker;
   final LocalStorageService _localStorageService;
+  final FirebaseMessaging _firebaseMessaging;
 
   IncidentRemoteSourceImpl({
     required SupabaseService supabaseService,
     required InternetConnectionChecker internetConnectionChecker,
     required LocalStorageService localStorageService,
+    required FirebaseMessaging firebaseMessaging,
   }) : _supabaseService = supabaseService,
        _internetConnectionChecker = internetConnectionChecker,
-       _localStorageService = localStorageService;
+       _localStorageService = localStorageService,
+       _firebaseMessaging = firebaseMessaging;
 
   @override
   Future<IncidentModel> uploadInicident(IncidentModel incident) async {
@@ -156,6 +166,56 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
     } catch (e) {
       AppLogger.e('fectch incidents by category Error: $e');
       return [];
+    }
+  }
+
+  @override
+  Future<IncidentNotificationModel> incidentNotificationService(
+    IncidentNotificationModel incident,
+  ) async {
+    try {
+      if (!await _internetConnectionChecker.hasConnection) {
+        throw ServerException(AppString.noInternetConnection);
+      }
+
+      final response = await _supabaseService.client
+          .from('devices')
+          .insert(incident.toJson())
+          .select();
+
+      if (response.isEmpty) {
+        throw ServerException(AppString.noResponse);
+      }
+
+      return IncidentNotificationModel.fromJson(response.first);
+    } catch (e) {
+      AppLogger.e('Incident notification Error: $e');
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<String> getFCMToken() async {
+    try {
+      await _firebaseMessaging.requestPermission();
+
+      final fcmToken = await _firebaseMessaging.getToken();
+      if (fcmToken == null) {
+        throw ServerException(AppString.noFcmTokenFound);
+      }
+
+      AppLogger.i('FCM token: $fcmToken');
+
+      final userId = _localStorageService.get(AppStorageKeys.uid);
+      if (userId == null) {
+        await _supabaseService.client.auth.signOut();
+        throw ServerException(AppString.userNotFound);
+      }
+
+      return fcmToken;
+    } catch (e) {
+      AppLogger.e('Get FCM token Error: $e');
+      throw ServerException(e.toString());
     }
   }
 }

@@ -1,3 +1,6 @@
+import 'package:citizen_report_incident/features/incidents/data/model/incident_notification_model.dart';
+import 'package:citizen_report_incident/features/incidents/domain/entities/incident_notification_entity.dart';
+
 import '../../../../core/constants/app_string.dart';
 import '../dto/fetch_incident_by_category.dart';
 
@@ -108,6 +111,34 @@ class IncidentRepositoryImpl implements IncidentRepository {
       }
 
       return Right(incidents);
+    } on ServerException catch (e) {
+      return Left(Failure(e.message));
+    } catch (e) {
+      return Left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, IncidentNotificationEntity>>
+  incidentNotificationService() async {
+    try {
+      final incidentNotificationModel = IncidentNotificationModel(
+        id: _uuid.v1(),
+        userId: _localStorageService.get(AppStorageKeys.uid) ?? '',
+        fcmToken: '',
+        createdAt: DateTime.now(),
+      );
+
+      final fcmToken = await _incidentRemoteSource.getFCMToken();
+
+      final incidentToUpload = incidentNotificationModel.copyWith(
+        fcmToken: fcmToken,
+      );
+
+      final updatedIncident = await _incidentRemoteSource
+          .incidentNotificationService(incidentToUpload);
+
+      return Right(updatedIncident);
     } on ServerException catch (e) {
       return Left(Failure(e.message));
     } catch (e) {
