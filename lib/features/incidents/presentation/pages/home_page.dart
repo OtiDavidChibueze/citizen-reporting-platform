@@ -137,87 +137,94 @@ class _HomePageState extends State<HomePage> {
   Widget build(BuildContext context) {
     return Padding(
       padding: EdgeInsets.symmetric(horizontal: w(16), vertical: h(16)),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    'Welcome back ',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: sp(13),
-                    ),
-                  ),
+      child: RefreshIndicator(
+        onRefresh: () {
+          context.read<IncidentBloc>().add(GetIncidentsEvent());
 
-                  Text(
-                    '${widget.currentUser?.fullname}',
-                    style: TextStyle(
-                      fontWeight: FontWeight.bold,
-                      fontSize: sp(23),
+          return Future.value();
+        },
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Welcome back ',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: sp(13),
+                      ),
                     ),
-                  ),
-                ],
-              ),
 
-              IconButton.outlined(
-                style: ButtonStyle(
-                  backgroundColor: WidgetStatePropertyAll(Colors.transparent),
+                    Text(
+                      '${widget.currentUser?.fullname}',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                        fontSize: sp(23),
+                      ),
+                    ),
+                  ],
                 ),
-                onPressed: () {},
-                icon: Icon(
-                  Icons.notifications,
-                  size: 30,
-                  color: AppColors.scaffold,
-                ),
-              ),
-            ],
-          ),
 
-          VSpace(30),
-
-          Expanded(
-            child: BlocConsumer<IncidentBloc, IncidentState>(
-              listener: (context, state) {
-                if (state is IncidentErrorState) {
-                  CustomSnackbar.error(context, state.message);
-                }
-              },
-              builder: (context, state) {
-                if (state is IncidentLoadingState) {
-                  return Center(
-                    child: SpinKitThreeBounce(
-                      color: AppColors.scaffold,
-                      size: 30,
-                    ),
-                  );
-                }
-
-                if (state is GetIncidentsSuccessState) {
-                  return ListView.builder(
-                    itemCount: state.incidents.length,
-                    itemBuilder: (context, index) {
-                      final incident = state.incidents[index];
-
-                      return IncidentView(incident: incident);
-                    },
-                  );
-                }
-
-                return Center(
-                  child: Text(
-                    'No incident uploaded',
-                    style: TextStyle(fontSize: sp(16)),
+                IconButton.outlined(
+                  style: ButtonStyle(
+                    backgroundColor: WidgetStatePropertyAll(Colors.transparent),
                   ),
-                );
-              },
+                  onPressed: () {},
+                  icon: Icon(
+                    Icons.notifications,
+                    size: 30,
+                    color: AppColors.scaffold,
+                  ),
+                ),
+              ],
             ),
-          ),
-        ],
+
+            VSpace(30),
+
+            Expanded(
+              child: BlocConsumer<IncidentBloc, IncidentState>(
+                listener: (context, state) {
+                  if (state is IncidentErrorState) {
+                    CustomSnackbar.error(context, state.message);
+                  }
+                },
+                builder: (context, state) {
+                  if (state is IncidentLoadingState) {
+                    return Center(
+                      child: SpinKitThreeBounce(
+                        color: AppColors.scaffold,
+                        size: 30,
+                      ),
+                    );
+                  }
+
+                  if (state is GetIncidentsSuccessState) {
+                    return ListView.builder(
+                      itemCount: state.incidents.length,
+                      itemBuilder: (context, index) {
+                        final incident = state.incidents[index];
+
+                        return IncidentView(incident: incident);
+                      },
+                    );
+                  }
+
+                  return Center(
+                    child: Text(
+                      'No incident uploaded',
+                      style: TextStyle(fontSize: sp(16)),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ],
+        ),
       ),
     );
   }

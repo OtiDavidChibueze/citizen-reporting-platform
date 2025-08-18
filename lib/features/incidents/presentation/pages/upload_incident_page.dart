@@ -1,5 +1,6 @@
 import 'dart:io';
 import 'package:citizen_report_incident/core/common/cubit/navigation_cubit/navigation_cubit.dart';
+import 'package:citizen_report_incident/core/logger/app_logger.dart';
 
 import '../../../../core/constants/app_string.dart';
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
@@ -76,6 +77,8 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
         }
       },
       builder: (context, state) {
+        AppLogger.d(state);
+
         return Padding(
           padding: EdgeInsets.symmetric(horizontal: w(16), vertical: h(16)),
           child: SingleChildScrollView(
