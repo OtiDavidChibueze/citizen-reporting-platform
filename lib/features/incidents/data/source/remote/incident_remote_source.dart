@@ -180,7 +180,7 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
 
       final response = await _supabaseService.client
           .from('devices')
-          .insert(incident.toJson())
+          .upsert(incident.toJson())
           .select();
 
       if (response.isEmpty) {

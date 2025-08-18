@@ -129,7 +129,6 @@ class _HomePageState extends State<HomePage> {
   @override
   void initState() {
     context.read<IncidentBloc>().add(GetIncidentsEvent());
-    context.read<IncidentBloc>().add(IncidentNotificationEvent());
 
     super.initState();
   }

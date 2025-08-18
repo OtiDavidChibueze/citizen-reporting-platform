@@ -1,3 +1,4 @@
+import 'package:citizen_report_incident/core/logger/app_logger.dart';
 import 'package:citizen_report_incident/features/incidents/data/model/incident_notification_model.dart';
 import 'package:citizen_report_incident/features/incidents/domain/entities/incident_notification_entity.dart';
 
@@ -134,6 +135,8 @@ class IncidentRepositoryImpl implements IncidentRepository {
       final incidentToUpload = incidentNotificationModel.copyWith(
         fcmToken: fcmToken,
       );
+
+      AppLogger.d(incidentToUpload);
 
       final updatedIncident = await _incidentRemoteSource
           .incidentNotificationService(incidentToUpload);

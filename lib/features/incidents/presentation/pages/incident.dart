@@ -7,13 +7,18 @@ import 'home_page.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-class Incident extends StatelessWidget {
+class Incident extends StatefulWidget {
   final UserEntity? currentUser;
 
   static const String routeName = 'main';
 
   const Incident({super.key, this.currentUser});
 
+  @override
+  State<Incident> createState() => _IncidentState();
+}
+
+class _IncidentState extends State<Incident> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
@@ -24,7 +29,7 @@ class Incident extends StatelessWidget {
           builder: (context, state) {
             switch (state.selectedIndex) {
               case 0:
-                return HomePage(currentUser: currentUser);
+                return HomePage(currentUser: widget.currentUser);
               case 1:
                 return UploadIncidentPage();
               case 2:

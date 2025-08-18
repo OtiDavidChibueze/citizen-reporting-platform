@@ -36,7 +36,7 @@ setupLocator() {
   locatorService.registerFactory(() => Uuid());
   locatorService.registerLazySingleton(() => InternetConnectionChecker.I);
   locatorService.registerLazySingleton(() => LocalStorageService());
-  locatorService.registerSingleton(() => FirebaseMessaging.instance);
+  locatorService.registerLazySingleton(() => FirebaseMessaging.instance);
 
   locatorService.registerFactory(() => ImagePicker());
 
