@@ -180,7 +180,7 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
 
       final response = await _supabaseService.client
           .from('devices')
-          .upsert(incident.toJson())
+          .upsert(incident.toJson(), onConflict: 'fcm_token')
           .select();
 
       if (response.isEmpty) {
