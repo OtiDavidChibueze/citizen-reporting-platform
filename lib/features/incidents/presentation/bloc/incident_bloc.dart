@@ -1,3 +1,6 @@
+import 'dart:async';
+
+import 'package:citizen_report_incident/core/logger/app_logger.dart';
 import 'package:citizen_report_incident/features/incidents/domain/usecases/incident_notification_service_usecase.dart';
 
 import '../../../../core/usecases/usecases.dart';
@@ -33,18 +36,38 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
        _fetchMyIncidentsUseCase = fetchMyIncidentsUseCase,
        _incidentNotificationServiceUsecase = incidentNotificationServiceUsecase,
        super(IncidentInitialState()) {
-    on<IncidentEvent>((event, emit) => emit(IncidentLoadingState()));
+    // on<IncidentEvent>((event, emit) => emit(IncidentLoadingState()));
     on<AddIncidentEvent>(_onAddIncident);
     on<GetIncidentsEvent>(_onGetIncidents);
     on<FetchIncidentsByCategoryEvent>(_onFetchIncidentsByCategory);
     on<FetchMyIncidentsEvent>(_onFetchMyIncidents);
     on<IncidentNotificationEvent>(_onIncidentNotification);
+    on<GetIncidentTimer>(_onGetIncidenTimer);
+    on<StopIncidentTimer>(_onStopIncidenTimer);
   }
+
+  Future<void> _onGetIncidenTimer(
+    GetIncidentTimer event,
+    Emitter<IncidentState> emit,
+  ) async {
+    AppLogger.d('Past here');
+
+    Timer(Duration(seconds: 5), () {
+      add(GetIncidentsEvent(refresh: false));
+    });
+  }
+
+  Future<void> _onStopIncidenTimer(
+    StopIncidentTimer event,
+    Emitter<IncidentState> emit,
+  ) async {}
 
   Future<void> _onAddIncident(
     AddIncidentEvent event,
     Emitter<IncidentState> emit,
   ) async {
+    emit(IncidentLoadingState());
+
     final result = await _uploadInicidentUseCase(
       UploadIncidentDto(
         title: event.req.title,
@@ -66,18 +89,31 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
     GetIncidentsEvent event,
     Emitter<IncidentState> emit,
   ) async {
+    if (event.refresh) {
+      emit(IncidentLoadingState());
+    }
+
     final result = await _getIncidentsUsecase(NoParams());
 
-    result.fold(
-      (l) => emit(IncidentErrorState(message: l.message)),
-      (r) => emit(GetIncidentsSuccessState(incidents: r)),
-    );
+    result.fold((l) => emit(IncidentErrorState(message: l.message)), (r) {
+      AppLogger.d('Past here 1');
+
+      emit(GetIncidentsSuccessState(incidents: r));
+
+      AppLogger.d('Past here 2');
+
+      add(GetIncidentTimer());
+
+      AppLogger.d('Past here 3');
+    });
   }
 
   Future<void> _onFetchIncidentsByCategory(
     FetchIncidentsByCategoryEvent event,
     Emitter<IncidentState> emit,
   ) async {
+    emit(IncidentLoadingState());
+
     final result = await _fetchIncidentsByCategoryUseCase(
       CategoryDto(category: event.req.category),
     );
@@ -92,6 +128,8 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
     FetchMyIncidentsEvent event,
     Emitter<IncidentState> emit,
   ) async {
+    emit(IncidentLoadingState());
+
     final result = await _fetchMyIncidentsUseCase(NoParams());
 
     result.fold(
@@ -104,6 +142,8 @@ class IncidentBloc extends Bloc<IncidentEvent, IncidentState> {
     IncidentNotificationEvent event,
     Emitter<IncidentState> emit,
   ) async {
+    emit(IncidentLoadingState());
+
     final result = await _incidentNotificationServiceUsecase(NoParams());
 
     result.fold(
