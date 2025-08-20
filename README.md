@@ -12,7 +12,7 @@ The app integrates with **Supabase** for authentication, database, and storage, 
 
 ---
 
-## 🚀 Features
+🚀 Features
 - 🔑 **User Authentication** (Register, Login, Session management with Supabase Auth)  
 - 📝 **Report Incidents** with title, description, category, geolocation, and images  
 - 📰 **View Feed** of all submitted incidents in real time  
@@ -22,7 +22,7 @@ The app integrates with **Supabase** for authentication, database, and storage, 
 
 ---
 
-## 🛠️ Tech Stack
+🛠️ Tech Stack
 - **Frontend**: Flutter & Dart  
 - **State Management**: Bloc Pattern  
 - **Backend**: Supabase (Auth, Database, Storage)  
@@ -32,7 +32,7 @@ The app integrates with **Supabase** for authentication, database, and storage, 
 
 ---
 
-## 📂 Project Structure
+📂 Project Structure
 ```bash
 lib/
  ├── core/
@@ -46,11 +46,6 @@ lib/
  ├── app.dart             # Root widget + routing
  └── main.dart            # App entry point, initialization
 
-## ⚙️ Setup & Installation
-git clone https://github.com/your-username/citizen-report-incident.git
-cd citizen-report-incident
-
-
 ⚙️ Setup & Installation
 
 Clone the repository
@@ -59,12 +54,12 @@ git clone https://github.com/your-username/citizen-report-incident.git
 cd citizen-report-incident
 
 
-Install dependencies
+##Install dependencies
 
 flutter pub get
 
 
-Configure environment variables
+##Configure environment variables
 
 Create a .env file in the root directory:
 
@@ -74,7 +69,7 @@ SUPABASE_ANON_KEY=your-supabase-anon-key
 
 Ensure .env is included in pubspec.yaml under assets.
 
-Run the app
+##Run the app
 
 flutter run
 
