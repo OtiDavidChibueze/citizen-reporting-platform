@@ -1,143 +1,170 @@
-// import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:citizen_report_incident/features/incidents/data/dto/fetch_incident_by_category.dart';
+import 'package:flutter/material.dart';
+
+import 'package:citizen_report_incident/core/common/theme/app_colors.dart';
+import 'package:citizen_report_incident/core/utils/custom_snackbar.dart';
+import 'package:citizen_report_incident/core/utils/screen_util.dart';
+import 'package:citizen_report_incident/features/incidents/presentation/bloc/incident_bloc.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
+
+class FeedPage extends StatefulWidget {
+  const FeedPage({super.key});
+
+  @override
+  State<FeedPage> createState() => _FeedPageState();
+}
+
+class _FeedPageState extends State<FeedPage> {
+  String? selectedCategory;
+  final List<String> categories = ['Accident', 'Fighting', 'Rioting', 'Other'];
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        VSpace(16),
+
+        Text(
+          'View Incidents By Category',
+          style: TextStyle(fontWeight: FontWeight.bold, fontSize: sp(20)),
+        ),
+
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: DropdownButton<String>(
+            dropdownColor: Colors.white,
+            value: selectedCategory ?? 'Accident',
+            items: categories
+                .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
+                .toList(),
+            onChanged: (val) {
+              setState(() {
+                selectedCategory = val;
+              });
+
+              context.read<IncidentBloc>().add(
+                FetchIncidentsByCategoryEvent(
+                  req: CategoryDto(category: selectedCategory ?? 'Accident'),
+                ),
+              );
+            },
+          ),
+        ),
+        Expanded(
+          child: BlocConsumer<IncidentBloc, IncidentState>(
+            listener: (context, state) {
+              if (state is IncidentErrorState) {
+                CustomSnackbar.error(context, state.message);
+              }
+            },
+            builder: (context, state) {
+              if (state is IncidentLoadingState) {
+                return Center(
+                  child: SpinKitThreeBounce(
+                    color: AppColors.scaffold,
+                    size: 30,
+                  ),
+                );
+              }
+
+              if (state is GetIncidentsSuccessState) {
+                return ListView.builder(
+                  itemCount: state.incidents.length,
+                  itemBuilder: (context, index) {
+                    final incident = state.incidents[index];
+                    final imageUrl = incident.imageUrl;
+
+                    if (incident.category == selectedCategory ||
+                        incident.category == 'Accident') {
+                      Widget leadingWidget;
+                      if (imageUrl.startsWith('http')) {
+                        leadingWidget = SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Image.network(imageUrl, fit: BoxFit.cover),
+                        );
+                      } else {
+                        leadingWidget = const SizedBox(
+                          width: 60,
+                          height: 60,
+                          child: Icon(Icons.image_not_supported),
+                        );
+                      }
+                      return Card(
+                        color: Colors.white,
+                        margin: EdgeInsets.symmetric(
+                          horizontal: w(12),
+                          vertical: h(8),
+                        ),
+                        child: ListTile(
+                          leading: leadingWidget,
+                          title: Text(
+                            incident.title,
+                            style: TextStyle(fontWeight: FontWeight.bold),
+                          ),
+                          subtitle: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text('Category: ${incident.category}'),
+                              Text('Description: ${incident.description}'),
+                              Text(
+                                'Location: (${incident.latitude}, ${incident.latitude})',
+                              ),
+                              Text('By: ${incident.createdByUsername}'),
+                            ],
+                          ),
+                          isThreeLine: true,
+                          onTap: () {}, //  TODO: implement view incident
+                        ),
+                      );
+                    } else {
+                      return SizedBox();
+                    }
+                  },
+                );
+              }
+
+              return Center(
+                child: Text(
+                  'No incident uploaded',
+                  style: TextStyle(fontSize: sp(16)),
+                ),
+              );
+            },
+          ),
+        ),
+      ],
+    );
+  }
+}
+
 // import 'package:flutter/material.dart';
-// import '../../../../core/service/local_storage_service.dart';
-// import '../../../../core/storage/app_storage_keys.dart';
 
-// class FeedPage extends StatefulWidget {
+// class FeedPage extends StatelessWidget {
+//   static const String routeName = 'feed';
+
 //   const FeedPage({super.key});
-
-//   @override
-//   State<FeedPage> createState() => _FeedPageState();
-// }
-
-// class _FeedPageState extends State<FeedPage> {
-//   String? selectedCategory;
-//   bool showMyIncidents = false;
-//   final List<String> categories = [
-//     'All',
-//     'Accident',
-//     'Fighting',
-//     'Rioting',
-//     'Other',
-//   ];
-
-//   String? get currentUserId => LocalStorageService().get(AppStorageKeys.uid);
 
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
-//       appBar: AppBar(
-//         title: const Text(
-//           'Recent Incidents',
-//           style: TextStyle(fontWeight: FontWeight.bold),
-//         ),
-//         centerTitle: true,
-//       ),
-//       body: Column(
-//         children: [
-//           Padding(
-//             padding: const EdgeInsets.all(8.0),
-//             child: DropdownButton<String>(
-//               value: selectedCategory ?? 'All',
-//               items: categories
-//                   .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
-//                   .toList(),
-//               onChanged: (val) {
-//                 setState(() {
-//                   selectedCategory = val;
-//                 });
-//               },
-//             ),
-//           ),
-//           Expanded(
-//             child: StreamBuilder<QuerySnapshot>(
-//               stream: FirebaseFirestore.instance
-//                   .collection('incidents')
-//                   .orderBy('createdAt', descending: true)
-//                   .snapshots(),
-//               builder: (context, snapshot) {
-//                 if (snapshot.connectionState == ConnectionState.waiting) {
-//                   return const Center(child: CircularProgressIndicator());
-//                 }
-//                 if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
-//                   return const Center(child: Text('No incidents found.'));
-//                 }
-//                 final docs = snapshot.data!.docs;
-//                 var filtered = docs;
-//                 if (selectedCategory != null && selectedCategory != 'All') {
-//                   filtered = filtered
-//                       .where((doc) => doc['category'] == selectedCategory)
-//                       .toList();
-//                 }
-//                 if (showMyIncidents && currentUserId != null) {
-//                   filtered = filtered
-//                       .where((doc) => doc['createdByUserId'] == currentUserId)
-//                       .toList();
-//                 }
-//                 return ListView.builder(
-//                   itemCount: filtered.length,
-//                   itemBuilder: (context, idx) {
-//                     final data = filtered[idx].data() as Map<String, dynamic>;
-//                     final imageUrl = data['imageUrl'] ?? '';
-//                     Widget leadingWidget;
-//                     if (imageUrl is String && imageUrl.startsWith('http')) {
-//                       leadingWidget = SizedBox(
-//                         width: 60,
-//                         height: 60,
-//                         child: Image.network(imageUrl, fit: BoxFit.cover),
-//                       );
-//                     } else {
-//                       leadingWidget = const SizedBox(
-//                         width: 60,
-//                         height: 60,
-//                         child: Icon(Icons.image_not_supported),
-//                       );
-//                     }
-//                     return Card(
-//                       margin: const EdgeInsets.symmetric(
-//                         horizontal: 12,
-//                         vertical: 8,
-//                       ),
-//                       child: ListTile(
-//                         leading: leadingWidget,
-//                         title: Text(data['title'] ?? ''),
-//                         subtitle: Column(
-//                           crossAxisAlignment: CrossAxisAlignment.start,
-//                           children: [
-//                             Text('Category: ${data['category'] ?? ''}'),
-//                             Text('Description: ${data['description'] ?? ''}'),
-//                             Text(
-//                               'Location: (${data['latitude'] ?? ''}, ${data['longitude'] ?? ''})',
-//                             ),
-//                             Text('By: ${data['createdByEmail'] ?? ''}'),
-//                           ],
-//                         ),
-//                         isThreeLine: true,
-//                       ),
-//                     );
-//                   },
-//                 );
-//               },
-//             ),
-//           ),
-//         ],
-//       ),
+//       appBar: AppBar(title: const Text('Feed')),
+//       body: const Center(child: Text('Feed Page')),
 //     );
 //   }
 // }
 
-import 'package:flutter/material.dart';
+// class FeedPage extends StatelessWidget {
+//   static const String routeName = 'feed';
 
-class FeedPage extends StatelessWidget {
-  static const String routeName = 'feed';
+//   const FeedPage({super.key});
 
-  const FeedPage({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(title: const Text('Feed')),
-      body: const Center(child: Text('Feed Page')),
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Scaffold(
+//       appBar: AppBar(title: const Text('Feed')),
+//       body: const Center(child: Text('Feed Page')),
+//     );
+//   }
+// }

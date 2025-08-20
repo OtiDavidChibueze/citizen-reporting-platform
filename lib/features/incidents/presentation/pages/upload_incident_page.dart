@@ -1,6 +1,8 @@
 import 'dart:io';
 import 'package:citizen_report_incident/core/common/cubit/navigation_cubit/navigation_cubit.dart';
 import 'package:citizen_report_incident/core/logger/app_logger.dart';
+import 'package:flutter/foundation.dart';
+import 'package:image_picker/image_picker.dart';
 
 import '../../../../core/constants/app_string.dart';
 import '../../../../core/common/cubit/geolocator/geolocator_cubit.dart';
@@ -33,7 +35,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
   final _titleCtrl = TextEditingController();
   final _descriptionCtrl = TextEditingController();
   String? _selectedCategory;
-  File? imageFile;
+  XFile? imageFile;
   double? lat;
   double? long;
 
@@ -47,33 +49,35 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
     super.dispose();
   }
 
-  _clear() {
+_clear() {
     _titleCtrl.clear();
     _descriptionCtrl.clear();
-    _selectedCategory;
+    _selectedCategory = null; 
     imageFile = null;
     lat = null;
     long = null;
+    setState(() {}); 
   }
+
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<IncidentBloc, IncidentState>(
       listener: (context, state) {
         if (state is IncidentLoadingState) {
-          return CustomDialogLoader.show(context);
+          CustomDialogLoader.show(context);
         }
 
         if (state is IncidentSuccessState) {
           CustomDialogLoader.cancel(context);
           _clear();
           CustomSnackbar.success(context, AppString.incidentSuccess);
-          return context.read<NavigationCubit>().setSelectedIndex(0);
+          context.read<NavigationCubit>().setSelectedIndex(0);
         }
 
         if (state is IncidentErrorState) {
           CustomDialogLoader.cancel(context);
-          return CustomSnackbar.error(context, state.message);
+          CustomSnackbar.error(context, state.message);
         }
       },
       builder: (context, state) {
@@ -141,10 +145,9 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                             width: double.infinity,
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
-                              child: Image.file(
-                                File(state.imageFile.path),
-                                fit: BoxFit.cover,
-                              ),
+                              child: kIsWeb
+                                  ? Image.network(state.imageFile.path)
+                                  : Image.file(File(state.imageFile.path)),
                             ),
                           ),
                         );
@@ -225,6 +228,9 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                   VSpace(30),
 
                   TextButton(
+                    style: ButtonStyle(
+                      overlayColor: WidgetStatePropertyAll(Colors.transparent),
+                    ),
                     onPressed: () {
                       context.read<GeolocatorCubit>().getCurrentPosition();
                     },
@@ -326,7 +332,7 @@ class _UploadIncidentPageState extends State<UploadIncidentPage> {
                               category: _selectedCategory!,
                               latitude: lat!,
                               longitude: long!,
-                              imageFile: imageFile ?? File(''),
+                              imageFile: imageFile ?? XFile(''),
                             ),
                           ),
                         );

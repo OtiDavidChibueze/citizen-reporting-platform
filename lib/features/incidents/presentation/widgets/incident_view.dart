@@ -57,6 +57,8 @@ class IncidentView extends StatelessWidget {
             height: 2,
           ),
         ),
+
+        VSpace(50),
       ],
     );
   }

@@ -1,3 +1,4 @@
+import 'package:citizen_report_incident/firebase_options.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -34,7 +35,10 @@ void main() async {
 
   await setupLocator();
 
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+
+  );
 
   runApp(
     MultiBlocProvider(

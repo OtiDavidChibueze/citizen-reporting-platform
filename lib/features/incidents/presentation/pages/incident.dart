@@ -67,7 +67,7 @@ class _IncidentState extends State<Incident> {
                 NavigationDestination(
                   icon: Icon(Icons.list_outlined),
                   label: 'Uploads',
-                  selectedIcon: Icon(Icons.newspaper),
+                  selectedIcon: Icon(Icons.list),
                 ),
               ],
             );

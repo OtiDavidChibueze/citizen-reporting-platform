@@ -1,4 +1,3 @@
-import 'dart:io';
 
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -26,7 +25,7 @@ class ImagePickerCubit extends Cubit<ImagePickerState> {
         return emit(ImagePickerErrorState(message: 'No image selected'));
       }
 
-      return emit(ImagePickerSuccessState(imageFile: File(pickImage.path)));
+      return emit(ImagePickerSuccessState(imageFile: pickImage));
     } catch (e) {
       emit(ImagePickerLoadingState());
       return emit(ImagePickerErrorState(message: e.toString()));

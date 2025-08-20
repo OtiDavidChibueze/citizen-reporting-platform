@@ -12,7 +12,7 @@ final class ImagePickerInitial extends ImagePickerState {}
 final class ImagePickerLoadingState extends ImagePickerState {}
 
 final class ImagePickerSuccessState extends ImagePickerState {
-  final File imageFile;
+  final XFile imageFile;
 
   const ImagePickerSuccessState({required this.imageFile});
 }

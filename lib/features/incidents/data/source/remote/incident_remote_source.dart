@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:citizen_report_incident/features/incidents/data/model/incident_notification_model.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:flutter/foundation.dart';
 
 import '../../../../../core/storage/app_storage_keys.dart';
 import '../../dto/fetch_incident_by_category.dart';
@@ -62,25 +65,44 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
     }
   }
 
-  @override
-  Future<String> uploadIncidentImage(UploadIncidentImgDto req) async {
-    try {
-      if (!await _internetConnectionChecker.hasConnection) {
-        throw ServerException(AppString.noInternetConnection);
-      }
 
+
+
+@override
+  Future<String> uploadIncidentImage(UploadIncidentImgDto req) async {
+  try {
+    if (!await _internetConnectionChecker.hasConnection) {
+      throw ServerException(AppString.noInternetConnection);
+    }
+
+    if (kIsWeb) {
+      // Web → upload as bytes
+      final bytes = await req.image.readAsBytes();
       await _supabaseService.client.storage
           .from('incidents_image')
-          .upload(req.incident.id, req.image);
-
-      return _supabaseService.client.storage
+          .uploadBinary(req.incident.id, bytes);
+    } else {
+      // Mobile/Desktop → upload as File
+      final file = File(req.image.path);
+      await _supabaseService.client.storage
           .from('incidents_image')
-          .getPublicUrl(req.incident.id);
-    } catch (e) {
-      AppLogger.e('Incident upload Error: $e');
-      throw ServerException(e.toString());
+          .upload(req.incident.id, file);
     }
+
+    return _supabaseService.client.storage
+        .from('incidents_image')
+        .getPublicUrl(req.incident.id);
+  } catch (e) {
+    AppLogger.e('Incident upload Error: $e');
+    throw ServerException(e.toString());
   }
+}
+
+
+
+
+
+
 
   @override
   Future<List<IncidentModel>> getIncidents() async {
@@ -95,6 +117,11 @@ class IncidentRemoteSourceImpl implements IncidentRemoteSource {
           .order('created_at', ascending: false);
 
       AppLogger.i('Fetch incidents successfully: ${incidents.first}');
+
+
+      if (incidents.isEmpty) {
+        throw ServerException(AppString.noResponse);
+      }
 
       return incidents
           .map(

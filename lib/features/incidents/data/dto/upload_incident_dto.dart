@@ -1,10 +1,11 @@
-import 'dart:io';
+
+import 'package:image_picker/image_picker.dart';
 
 class UploadIncidentDto {
   final String title;
   final String description;
   final String category;
-  final File imageFile;
+  final XFile imageFile;
   final double latitude;
   final double longitude;
 
