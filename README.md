@@ -53,13 +53,12 @@ Clone the repository
 git clone https://github.com/your-username/citizen-report-incident.git
 cd citizen-report-incident
 
-
-##Install dependencies
+🔰Install dependencies
 
 flutter pub get
 
 
-##Configure environment variables
+♻Configure environment variables
 
 Create a .env file in the root directory:
 
@@ -69,12 +68,12 @@ SUPABASE_ANON_KEY=your-supabase-anon-key
 
 Ensure .env is included in pubspec.yaml under assets.
 
-##Run the app
+♻Run the app
 
 flutter run
 
 
-## 🔑 Key Implementation Highlights
+✅🔑 Key Implementation Highlights
 
 Authentication Flow: Supabase Auth via AuthRemoteSource, with sessions cached in LocalStorageService.
 
@@ -84,7 +83,7 @@ Notifications: FCM tokens stored in Supabase → new incidents trigger push aler
 
 Error Handling: Remote exceptions mapped to domain Failure → surfaced by Bloc states.
 
-# 📸 Screenshots
+📸 Screenshots
 ![Login Page](image.png)
 ![Sign Up](image-1.png)
 ![Home page](image-2.png)
