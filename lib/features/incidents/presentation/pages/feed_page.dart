@@ -16,8 +16,15 @@ class FeedPage extends StatefulWidget {
 }
 
 class _FeedPageState extends State<FeedPage> {
-  String? selectedCategory;
-  final List<String> categories = ['Accident', 'Fighting', 'Rioting', 'Other'];
+  String selectedCategory = 'All'; // default selection is "All"
+  final List<String> categories = [
+    'All',
+    'Accident',
+    'Fighting',
+    'Rioting',
+    'Fire',
+    'Other',
+  ];
 
   @override
   Widget build(BuildContext context) {
@@ -34,23 +41,28 @@ class _FeedPageState extends State<FeedPage> {
           padding: const EdgeInsets.all(8.0),
           child: DropdownButton<String>(
             dropdownColor: Colors.white,
-            value: selectedCategory ?? 'Accident',
+            value: selectedCategory,
             items: categories
                 .map((cat) => DropdownMenuItem(value: cat, child: Text(cat)))
                 .toList(),
             onChanged: (val) {
+              if (val == null) return;
+
               setState(() {
                 selectedCategory = val;
               });
 
               context.read<IncidentBloc>().add(
                 FetchIncidentsByCategoryEvent(
-                  req: CategoryDto(category: selectedCategory ?? 'Accident'),
+                  req: CategoryDto(
+                    category: selectedCategory,
+                  ),
                 ),
               );
             },
           ),
         ),
+
         Expanded(
           child: BlocConsumer<IncidentBloc, IncidentState>(
             listener: (context, state) {
@@ -69,58 +81,62 @@ class _FeedPageState extends State<FeedPage> {
               }
 
               if (state is GetIncidentsSuccessState) {
+                final filteredIncidents = selectedCategory == 'All'
+                    ? state.incidents
+                    : state.incidents
+                          .where(
+                            (incident) => incident.category == selectedCategory,
+                          )
+                          .toList();
+
                 return ListView.builder(
-                  itemCount: state.incidents.length,
+                  itemCount: filteredIncidents.length,
                   itemBuilder: (context, index) {
-                    final incident = state.incidents[index];
+                    final incident = filteredIncidents[index];
                     final imageUrl = incident.imageUrl;
 
-                    if (incident.category == selectedCategory ||
-                        incident.category == 'Accident') {
-                      Widget leadingWidget;
-                      if (imageUrl.startsWith('http')) {
-                        leadingWidget = SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Image.network(imageUrl, fit: BoxFit.cover),
-                        );
-                      } else {
-                        leadingWidget = const SizedBox(
-                          width: 60,
-                          height: 60,
-                          child: Icon(Icons.image_not_supported),
-                        );
-                      }
-                      return Card(
-                        color: Colors.white,
-                        margin: EdgeInsets.symmetric(
-                          horizontal: w(12),
-                          vertical: h(8),
-                        ),
-                        child: ListTile(
-                          leading: leadingWidget,
-                          title: Text(
-                            incident.title,
-                            style: TextStyle(fontWeight: FontWeight.bold),
-                          ),
-                          subtitle: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text('Category: ${incident.category}'),
-                              Text('Description: ${incident.description}'),
-                              Text(
-                                'Location: (${incident.latitude}, ${incident.latitude})',
-                              ),
-                              Text('By: ${incident.createdByUsername}'),
-                            ],
-                          ),
-                          isThreeLine: true,
-                          onTap: () {}, //  TODO: implement view incident
-                        ),
+                    Widget leadingWidget;
+                    if (imageUrl.startsWith('http')) {
+                      leadingWidget = SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: Image.network(imageUrl, fit: BoxFit.cover),
                       );
                     } else {
-                      return SizedBox();
+                      leadingWidget = const SizedBox(
+                        width: 60,
+                        height: 60,
+                        child: Icon(Icons.image_not_supported),
+                      );
                     }
+
+                    return Card(
+                      color: Colors.white,
+                      margin: EdgeInsets.symmetric(
+                        horizontal: w(12),
+                        vertical: h(8),
+                      ),
+                      child: ListTile(
+                        leading: leadingWidget,
+                        title: Text(
+                          incident.title,
+                          style: TextStyle(fontWeight: FontWeight.bold),
+                        ),
+                        subtitle: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text('Category: ${incident.category}'),
+                            Text('Description: ${incident.description}'),
+                            Text(
+                              'Location: (${incident.latitude}, ${incident.longitude})',
+                            ),
+                            Text('By: ${incident.createdByUsername}'),
+                          ],
+                        ),
+                        isThreeLine: true,
+                        onTap: () {}, // TODO: implement view incident
+                      ),
+                    );
                   },
                 );
               }
@@ -138,33 +154,3 @@ class _FeedPageState extends State<FeedPage> {
     );
   }
 }
-
-// import 'package:flutter/material.dart';
-
-// class FeedPage extends StatelessWidget {
-//   static const String routeName = 'feed';
-
-//   const FeedPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Feed')),
-//       body: const Center(child: Text('Feed Page')),
-//     );
-//   }
-// }
-
-// class FeedPage extends StatelessWidget {
-//   static const String routeName = 'feed';
-
-//   const FeedPage({super.key});
-
-//   @override
-//   Widget build(BuildContext context) {
-//     return Scaffold(
-//       appBar: AppBar(title: const Text('Feed')),
-//       body: const Center(child: Text('Feed Page')),
-//     );
-//   }
-// }

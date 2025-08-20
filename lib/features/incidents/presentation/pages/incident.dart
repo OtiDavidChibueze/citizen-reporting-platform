@@ -29,7 +29,7 @@ class _IncidentState extends State<Incident> {
           builder: (context, state) {
             switch (state.selectedIndex) {
               case 0:
-                return HomePage(currentUser: widget.currentUser);
+                return HomePage(currentUser: widget.currentUser!);
               case 1:
                 return UploadIncidentPage();
               case 2:

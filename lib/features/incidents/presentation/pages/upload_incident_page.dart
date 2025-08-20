@@ -146,8 +146,8 @@ _clear() {
                             child: ClipRRect(
                               borderRadius: BorderRadius.circular(10),
                               child: kIsWeb
-                                  ? Image.network(state.imageFile.path)
-                                  : Image.file(File(state.imageFile.path)),
+                                  ? Image.network(state.imageFile.path, fit: BoxFit.cover)
+                                  : Image.file(File(state.imageFile.path), fit: BoxFit.cover),
                             ),
                           ),
                         );
@@ -210,7 +210,7 @@ _clear() {
                         borderRadius: BorderRadius.circular(sr(20)),
                       ),
                     ),
-                    items: ['Accident', 'Fire', 'Theft', 'Rioting', 'Other']
+                    items: ['Accident', 'Fire', 'Theft', 'Rioting', 'Fighting' , 'Other']
                         .map(
                           (e) => DropdownMenuItem(
                             value: e,
